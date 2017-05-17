@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import java.util.Random;
@@ -19,6 +21,7 @@ public class DroidInfoBattery {
     public static BroadcastReceiver batteryReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            Log.d("DroidBattery", "DroidInfoBattery - BroadcastReceiver " );
             int level = intent.getIntExtra("level", 0);
             String battery = String.valueOf(level);
             if (DroidConfigurationActivity.BatteryCurrent != battery) {
@@ -48,11 +51,13 @@ public class DroidInfoBattery {
             }
         }
     }
-    public static void updateViews(Context context, String batteryLevel ) {
-       // Log.d("DroidBattery", "updateViews()" );
+    public static void updateViews(Context context, String batteryLevel) {
+        Log.d("DroidBattery", "DroidInfoBattery - updateViews()" );
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
         views.setTextViewText(R.id.batteryText, batteryLevel);
       //  views.setTextColor(R.id.batteryText, randomColor());
+        //views.setTextViewTextSize(R.id.batteryText, TypedValue.COMPLEX_UNIT_DIP , 34);
+
         ComponentName componentName = new ComponentName(context, DroidWidget.class);
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
         appWidgetManager.updateAppWidget(componentName, views);

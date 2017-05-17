@@ -10,9 +10,8 @@
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:gravity="center"
-        android:text="100"
         android:background="@android:color/transparent"
         android:textColor="@android:color/white"
-        android:textSize="50dp" />
+        android:textSize="30dp" />
 
 </LinearLayout>

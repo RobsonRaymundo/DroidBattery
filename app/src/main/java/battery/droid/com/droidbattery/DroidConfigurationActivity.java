@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * Created by Robson on 02/05/2017.
@@ -20,10 +21,10 @@ public class DroidConfigurationActivity extends PreferenceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         context = getBaseContext();
-        //Log.d("DroidBattery", "onCreate: " );
+        Log.d("DroidBattery", "DroidConfigurationActivity - onCreate: " );
         super.onCreate(savedInstanceState);
-        Intent intentService = new Intent(context, DroidService.class);
-        startService(intentService);
+        Toast.makeText(this, "Widget Droid Battery está pronto para ser adicionado!",
+                Toast.LENGTH_LONG).show();
         finish();
     }
 }
