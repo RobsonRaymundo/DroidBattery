@@ -25,14 +25,15 @@ import java.util.Locale;
  */
 
 public class DroidWidget extends AppWidgetProvider {
+    public static boolean onAppWidgetOptionsChanged;
     private static final String ACTION_BATTERY_UPDATE = "battery.droid.com.droidbattery.UPDATE";
     private int batteryLevel = 0;
 
     @Override
     public void onEnabled(Context context) {
         super.onEnabled(context);
-        Intent intentService = new Intent(context, DroidService.class);
-        context.startService(intentService);
+       // Intent intentService = new Intent(context, DroidService.class);
+       // context.startService(intentService);
         Log.d("DroidBattery", "DroidWidget - onEnabled ");
     }
 
@@ -41,7 +42,7 @@ public class DroidWidget extends AppWidgetProvider {
         super.onDisabled(context);
 
         Log.d("DroidBattery", "DroidWidget - onDesabled ");
-        context.stopService(new Intent(context, DroidService.class));
+      //  context.stopService(new Intent(context, DroidService.class));
     }
 
     @Override
@@ -49,6 +50,7 @@ public class DroidWidget extends AppWidgetProvider {
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
 
         Log.d("DroidBattery", "DroidWidget - onAppWidgetOptionsChanged ");
+        onAppWidgetOptionsChanged = true;
 
         RemoteViews updateViews=
                 new RemoteViews(context.getPackageName(), R.layout.widget_layout);
@@ -70,6 +72,7 @@ public class DroidWidget extends AppWidgetProvider {
         }
 
         appWidgetManager.updateAppWidget(appWidgetId, updateViews);
+
     }
 
     @Override

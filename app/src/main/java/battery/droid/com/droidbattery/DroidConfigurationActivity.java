@@ -25,6 +25,8 @@ public class DroidConfigurationActivity extends PreferenceActivity {
         super.onCreate(savedInstanceState);
         Toast.makeText(this, "Widget Droid Battery está pronto para ser adicionado!",
                 Toast.LENGTH_LONG).show();
+        Intent intentService = new Intent(context, DroidService.class);
+        context.startService(intentService);
         finish();
     }
 }
