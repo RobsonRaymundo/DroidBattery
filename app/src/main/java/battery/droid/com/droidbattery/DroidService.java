@@ -1,5 +1,6 @@
 package battery.droid.com.droidbattery;
 
+import android.app.ActivityManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -83,4 +84,7 @@ public class DroidService extends Service implements TextToSpeech.OnInitListener
     public void onInit(int status) {
 
     }
+
+
+
 }

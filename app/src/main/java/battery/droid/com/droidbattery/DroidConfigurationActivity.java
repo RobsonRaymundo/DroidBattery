@@ -26,6 +26,13 @@ public class DroidConfigurationActivity extends PreferenceActivity {
         Toast.makeText(this, "Widget Droid Battery está pronto para ser adicionado!",
                 Toast.LENGTH_LONG).show();
         Intent intentService = new Intent(context, DroidService.class);
+        try {
+            context.stopService(intentService);
+        }
+        catch (Exception ex)
+        {
+            Log.d("DroidBattery", "DroidConfigurationActivity - Erro: " + ex.getMessage() );
+        }
         context.startService(intentService);
         finish();
     }

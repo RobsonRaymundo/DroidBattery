@@ -32,8 +32,14 @@ public class DroidWidget extends AppWidgetProvider {
     @Override
     public void onEnabled(Context context) {
         super.onEnabled(context);
-       // Intent intentService = new Intent(context, DroidService.class);
-       // context.startService(intentService);
+        Intent intentService = new Intent(context, DroidService.class);
+        try {
+            context.stopService(intentService);
+        }
+        catch (Exception ex)
+        {
+        }
+        context.startService(intentService);
         Log.d("DroidBattery", "DroidWidget - onEnabled ");
     }
 
@@ -83,6 +89,7 @@ public class DroidWidget extends AppWidgetProvider {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        onAppWidgetOptionsChanged = true;
         super.onReceive(context, intent);
         Log.d("DroidBattery", "DroidWidget - onReceive ");
     }

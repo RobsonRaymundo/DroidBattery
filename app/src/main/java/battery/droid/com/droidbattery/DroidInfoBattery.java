@@ -32,7 +32,7 @@ public class DroidInfoBattery implements TextToSpeech.OnInitListener {
             if (DroidWidget.onAppWidgetOptionsChanged || (!DroidConfigurationActivity.BatteryCurrent.contains(battery))) {
                 DroidWidget.onAppWidgetOptionsChanged = false;
                 DroidConfigurationActivity.BatteryCurrent = battery;
-                updateViews(context, battery);
+                updateViewsInfoBattery(context, battery);
                 if (battery.equals("100"))
                 {
                     try {
@@ -68,7 +68,7 @@ public class DroidInfoBattery implements TextToSpeech.OnInitListener {
             }
         }
     }
-    public static void updateViews(Context context, String batteryLevel) {
+    public static void updateViewsInfoBattery(Context context, String batteryLevel) {
         Log.d("DroidBattery", "DroidInfoBattery - updateViews()" );
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
         views.setTextViewText(R.id.batteryText, batteryLevel);
