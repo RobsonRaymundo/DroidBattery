@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:key="telaConfig"
+        android:title="@string/txt_tela_Config">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="spf_bateriaCarregada"
+            android:summary="@string/spf_fala_bateria_carregada"
+            android:title="@string/txt_titulo"></SwitchPreference>
+
+
+        <SwitchPreference
+            android:dependency="spf_bateriaCarregada"
+            android:defaultValue="false"
+            android:key="quiet"
+            android:summary="@string/quietSum"
+            android:title="@string/quietHours" />
+        <battery.droid.com.droidbattery.DroidTime
+            android:dependency="quiet"
+            android:defaultValue="23:00"
+            android:key="startTime"
+            android:showDefault="true"
+            android:title="@string/startTime" />
+        <battery.droid.com.droidbattery.DroidTime
+            android:dependency="quiet"
+            android:defaultValue="09:00"
+            android:key="stopTime"
+            android:showDefault="true"
+            android:title="@string/stopTime" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

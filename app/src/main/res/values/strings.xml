@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Droid Battery</string>
+    <string name="txt_tela_Config">Tela de Configuração</string>
+    <string name="txt_titulo">Síntese de Voz</string>
+    <string name="spf_fala_bateria_carregada">Ativar a síntese de Voz do Google para informar quando a bateria estiver totalmente carregada?</string>
+    <string name="quietSum">Não pertube entre as horas abaixo</string>
+    <string name="quietHours">Não perturbe</string>
+    <string name="startTime">Hora inicial</string>
+    <string name="stopTime">Hora final</string>
+    <string name="set">OK</string>
+    <string name="cancel">Cancelar</string>
 </resources>

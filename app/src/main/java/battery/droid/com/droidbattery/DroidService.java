@@ -52,24 +52,21 @@ public class DroidService extends Service implements TextToSpeech.OnInitListener
     @Override
     public void onDestroy() {
         Log.d("DroidBattery", "DroidService - onDestroy " );
-        Toast.makeText(this, "DroidBattery - DroidService - onDestroy ",
-                Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "DroidBattery - DroidService - onDestroy ", Toast.LENGTH_LONG).show();
         super.onDestroy();
     }
 
     @Override
     public boolean onUnbind(Intent intent) {
         Log.d("DroidBattery", "DroidService - onUnbind " );
-        Toast.makeText(this, "DroidBattery - DroidService - onUnbind ",
-                Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "DroidBattery - DroidService - onUnbind ", Toast.LENGTH_LONG).show();
         return super.onUnbind(intent);
     }
 
     @Override
     public void onLowMemory() {
         Log.d("DroidBattery", "DroidService - onLowMemory " );
-        Toast.makeText(this, "DroidBattery - DroidService - onLowMemory ",
-                Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "DroidBattery - DroidService - onLowMemory ", Toast.LENGTH_LONG).show();
         super.onLowMemory();
     }
 
