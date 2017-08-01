@@ -54,15 +54,7 @@ public class DroidConfigurationActivity extends PreferenceActivity {
         stop.setSummary(handleTime(mPrefs.getString("stopTime", "09:00")));
         stop.setOnPreferenceChangeListener(listener);
 
-        Intent intentService = new Intent(context, DroidService.class);
-        try {
-            context.stopService(intentService);
-        }
-        catch (Exception ex)
-        {
-            Log.d("DroidBattery", "DroidConfigurationActivity - Erro: " + ex.getMessage() );
-        }
-        context.startService(intentService);
+        DroidService.StopStartService(context);
 
     }
 

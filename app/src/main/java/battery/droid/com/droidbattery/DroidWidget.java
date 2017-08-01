@@ -1,6 +1,7 @@
 package battery.droid.com.droidbattery;
 
 import android.annotation.TargetApi;
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.appwidget.AppWidgetProviderInfo;
@@ -19,6 +20,7 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Robson on 02/05/2017.
@@ -32,16 +34,11 @@ public class DroidWidget extends AppWidgetProvider {
     @Override
     public void onEnabled(Context context) {
         super.onEnabled(context);
-        Intent intentService = new Intent(context, DroidService.class);
-        try {
-            context.stopService(intentService);
-        }
-        catch (Exception ex)
-        {
-        }
-        context.startService(intentService);
+        DroidService.StopStartService(context);
         Log.d("DroidBattery", "DroidWidget - onEnabled ");
     }
+
+
 
     @Override
     public void onDisabled(Context context) {
@@ -85,6 +82,21 @@ public class DroidWidget extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
         Log.d("DroidBattery", "DroidWidget - onUpdate ");
+
+        RemoteViews remoteViews;
+        ComponentName watchWidget;
+
+        remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
+        watchWidget = new ComponentName(context, DroidWidget.class);
+
+        remoteViews.setOnClickPendingIntent(R.id.batteryText, getPendingSelfIntent(context, ACTION_BATTERY_UPDATE));
+        appWidgetManager.updateAppWidget(watchWidget, remoteViews);
+    }
+
+    protected PendingIntent getPendingSelfIntent(Context context, String action) {
+        Intent intent = new Intent(context, getClass());
+        intent.setAction(action);
+        return PendingIntent.getBroadcast(context, 0, intent, 0);
     }
 
     @Override
@@ -92,6 +104,10 @@ public class DroidWidget extends AppWidgetProvider {
         onAppWidgetOptionsChanged = true;
         super.onReceive(context, intent);
         Log.d("DroidBattery", "DroidWidget - onReceive ");
+
+        if (ACTION_BATTERY_UPDATE.equals(intent.getAction())) {
+            DroidService.StopStartService(context);
+        }
     }
 
     @Override

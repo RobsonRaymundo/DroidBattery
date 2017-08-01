@@ -10,6 +10,7 @@
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:gravity="center"
+        android:text=" ? "
         android:background="@android:color/transparent"
         android:textColor="@android:color/white"
         android:textSize="30dp" />

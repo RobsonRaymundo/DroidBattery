@@ -27,6 +27,23 @@ public class DroidService extends Service implements TextToSpeech.OnInitListener
     public static TextToSpeech tts;
     private Context context;
 
+    public static void StopStartService(Context context) {
+        Intent intentService = new Intent(context, DroidService.class);
+        try {
+            context.stopService(intentService);
+        }
+        catch (Exception ex)
+        {
+        }
+        try {
+            context.startService(intentService);
+        }
+        catch (Exception ex)
+        {
+        }
+        Log.d("DroidBattery", "DroidWidget - StopStartService ");
+    }
+
     @Override
     public void onStart(Intent intent, int startId) {
         super.onStart(intent, startId);
