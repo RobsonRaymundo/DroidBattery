@@ -10,9 +10,11 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
@@ -106,7 +108,10 @@ public class DroidWidget extends AppWidgetProvider {
         Log.d("DroidBattery", "DroidWidget - onReceive ");
 
         if (ACTION_BATTERY_UPDATE.equals(intent.getAction())) {
+            updateViewsColorBattery(context, Color.RED);
             DroidService.StopStartService(context);
+            Vibrar(context, 100);
+            updateViewsColorBattery(context, Color.WHITE);
         }
     }
 
@@ -120,5 +125,33 @@ public class DroidWidget extends AppWidgetProvider {
     public void onDeleted(Context context, int[] appWidgetIds) {
         super.onDeleted(context, appWidgetIds);
         Log.d("DroidBattery", "DroidWidget - onRestored ");
+    }
+
+    private void Vibrar(Context context, int valor) {
+        try {
+            TimeSleep(100);
+            Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+            v.vibrate(valor);
+            TimeSleep(100);
+        } catch (Exception ex) {
+            Log.d("DroidBattery", "Vibrar: " + ex.getMessage());
+        }
+    }
+
+    private void TimeSleep(Integer seg) {
+        try {
+            Thread.sleep(seg);
+        } catch (Exception ex) {
+        }
+    }
+
+    private void updateViewsColorBattery(Context context, int color) {
+        Log.d("DroidBattery", "DroidWidget - updateViews()");
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
+        views.setTextColor(R.id.batteryText, color);
+
+        ComponentName componentName = new ComponentName(context, DroidWidget.class);
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+        appWidgetManager.updateAppWidget(componentName, views);
     }
 }

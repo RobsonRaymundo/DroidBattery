@@ -54,7 +54,7 @@ public class DroidConfigurationActivity extends PreferenceActivity {
         stop.setSummary(handleTime(mPrefs.getString("stopTime", "09:00")));
         stop.setOnPreferenceChangeListener(listener);
 
-        DroidService.StopStartService(context);
+      //  DroidService.StopStartService(context);
 
     }
 

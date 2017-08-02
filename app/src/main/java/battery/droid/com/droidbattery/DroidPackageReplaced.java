@@ -9,10 +9,10 @@ import android.util.Log;
  * Created by Robson on 03/05/2017.
  */
 
-public class DroidBootComplete extends BroadcastReceiver {
+public class DroidPackageReplaced extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         DroidService.StopStartService(context);
-        Log.d("DroidBattery", "DroidBootComplete - onReceive ");
+        Log.d("DroidBattery", "DroidPackageReplaced - onReceive ");
     }
 }
