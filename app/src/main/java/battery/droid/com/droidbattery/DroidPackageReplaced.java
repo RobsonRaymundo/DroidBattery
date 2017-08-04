@@ -12,6 +12,7 @@ import android.util.Log;
 public class DroidPackageReplaced extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
+        DroidCommon.updateViewsSizeBattery(context);
         DroidService.StopStartService(context);
         Log.d("DroidBattery", "DroidPackageReplaced - onReceive ");
     }

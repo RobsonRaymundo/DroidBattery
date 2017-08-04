@@ -72,26 +72,19 @@ public class DroidInfoBattery implements TextToSpeech.OnInitListener {
             if (DroidWidget.onAppWidgetOptionsChanged || (!DroidConfigurationActivity.BatteryCurrent.contains(battery))) {
                 DroidWidget.onAppWidgetOptionsChanged = false;
                 DroidConfigurationActivity.BatteryCurrent = battery;
-
                 if (DroidService.loopingBattery) {
-                    DroidService.loopingBattery =false;
-
-                    Integer totalBattery =  Integer.parseInt(battery);
-
-                    for (Integer i = 0; i <= totalBattery; i++)
-                    {
-                        TimeSleep(10);
-                        updateViewsInfoBattery(context, i.toString());
+                    DroidService.loopingBattery = false;
+                    Integer totalBattery = Integer.parseInt(battery);
+                    for (Integer i = 0; i <= totalBattery; i++) {
+                        DroidCommon.TimeSleep(10);
+                        DroidCommon.updateViewsInfoBattery(context, i.toString());
                     }
+                } else {
+                    DroidCommon.updateViewsInfoBattery(context, battery);
                 }
-                else
-                {
-                    updateViewsInfoBattery(context, battery);
-                }
-
                 if (NaoPertube(context)) {
                     if (battery.equals("100")) {
-                        if (InformarBateriaCarregada(context)) {
+                        if (DroidCommon.InformarBateriaCarregada(context)) {
                             try {
                                 DroidService.tts.speak("Bateria carregada, você já pode desconectar do carregador.", TextToSpeech.QUEUE_FLUSH, null);
 
@@ -103,57 +96,9 @@ public class DroidInfoBattery implements TextToSpeech.OnInitListener {
                 }
                 //   DroidConfigurationActivity.ColorCurrent = DroidConfigurationActivity.ColorCurrent + 1;
             }
-
-
         }
 
     };
-
-    public static boolean InformarBateriaCarregada(final Context context) {
-        boolean spf = false;
-        try {
-            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-            spf = sp.getBoolean("spf_bateriaCarregada", true);
-        } catch (Exception ex) {
-            Log.d("DroidInfoBattery", ex.getMessage());
-        }
-        return spf;
-
-    }
-
-
-    private static int randomColor() {
-        switch (DroidConfigurationActivity.ColorCurrent) {
-            case 0: {
-                return Color.WHITE;
-            }
-            case 1: {
-                return Color.GREEN;
-            }
-            case 2: {
-                return Color.YELLOW;
-            }
-            case 3: {
-                DroidConfigurationActivity.ColorCurrent = 0;
-                return Color.RED;
-            }
-            default: {
-                return Color.WHITE;
-            }
-        }
-    }
-
-    public static void updateViewsInfoBattery(Context context, String batteryLevel) {
-        Log.d("DroidBattery", "DroidInfoBattery - updateViews()");
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
-        views.setTextViewText(R.id.batteryText, batteryLevel);
-        //  views.setTextColor(R.id.batteryText, randomColor());
-        //views.setTextViewTextSize(R.id.batteryText, TypedValue.COMPLEX_UNIT_DIP , 34);
-
-        ComponentName componentName = new ComponentName(context, DroidWidget.class);
-        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-        appWidgetManager.updateAppWidget(componentName, views);
-    }
 
     @Override
     public void onInit(int status) {
@@ -161,10 +106,5 @@ public class DroidInfoBattery implements TextToSpeech.OnInitListener {
 
     }
 
-    private static void TimeSleep(Integer seg) {
-        try {
-            Thread.sleep(seg);
-        } catch (Exception ex) {
-        }
-    }
+
 }

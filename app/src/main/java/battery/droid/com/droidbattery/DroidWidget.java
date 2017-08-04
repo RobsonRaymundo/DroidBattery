@@ -40,14 +40,10 @@ public class DroidWidget extends AppWidgetProvider {
         Log.d("DroidBattery", "DroidWidget - onEnabled ");
     }
 
-
-
     @Override
     public void onDisabled(Context context) {
         super.onDisabled(context);
-
         Log.d("DroidBattery", "DroidWidget - onDesabled ");
-      //  context.stopService(new Intent(context, DroidService.class));
     }
 
     @Override
@@ -89,7 +85,7 @@ public class DroidWidget extends AppWidgetProvider {
         ListenerOnClick(context, appWidgetManager);
     }
 
-    public void ListenerOnClick(Context context, AppWidgetManager appWidgetManager) {
+    private void ListenerOnClick(Context context, AppWidgetManager appWidgetManager) {
         RemoteViews remoteViews;
         ComponentName watchWidget;
 
@@ -107,17 +103,6 @@ public class DroidWidget extends AppWidgetProvider {
         return PendingIntent.getBroadcast(context, 0, intent, 0);
     }
 
-    private void IHateSamsung(Context context, Intent intent){
-        Log.d("DroidBattery", "DroidWidget - onReceive - IHateSamsung ");
-        if (intent == null || intent.getAction() == null)
-            return;
-
-        if (intent.getAction().contentEquals("com.sec.android.widgetapp.APPWIDGET_RESIZE") &&
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            handleTouchWiz(context, intent);
-        }
-    }
-
     @Override
     public void onReceive(Context context, Intent intent) {
      //   IHateSamsung(context, intent);
@@ -126,35 +111,13 @@ public class DroidWidget extends AppWidgetProvider {
         onAppWidgetOptionsChanged = true;
 
         if (ACTION_BATTERY_UPDATE.equals(intent.getAction())) {
-            updateViewsColorBattery(context, Color.RED);
+            DroidCommon.updateViewsColorBattery(context, Color.RED);
             DroidService.loopingBattery = true;
             DroidService.StopStartService(context);
-            Vibrar(context, 100);
-            updateViewsColorBattery(context, Color.WHITE);
+            DroidCommon.Vibrar(context, 100);
+            DroidCommon.updateViewsColorBattery(context, Color.WHITE);
         }
     }
-
-
-    @TargetApi(16)
-    private void handleTouchWiz(Context context, Intent intent) {
-        Log.d("DroidBattery", "DroidWidget - handleTouchWiz ");
-        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-
-        int appWidgetId = intent.getIntExtra("widgetId", 0);
-        int widgetSpanX = intent.getIntExtra("widgetspanx", 0);
-        int widgetSpanY = intent.getIntExtra("widgetspany", 0);
-
-        if (appWidgetId > 0 && widgetSpanX > 0 && widgetSpanY > 0) {
-            Bundle newOptions = new Bundle();
-            // We have to convert these numbers for future use
-            newOptions.putInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, widgetSpanY * 74);
-            newOptions.putInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, widgetSpanX * 74);
-
-            onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
-        }
-    }
-
-
 
     @Override
     public void onRestored(Context context, int[] oldWidgetIds, int[] newWidgetIds) {
@@ -166,33 +129,5 @@ public class DroidWidget extends AppWidgetProvider {
     public void onDeleted(Context context, int[] appWidgetIds) {
         super.onDeleted(context, appWidgetIds);
         Log.d("DroidBattery", "DroidWidget - onRestored ");
-    }
-
-    private void Vibrar(Context context, int valor) {
-        try {
-            TimeSleep(100);
-            Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-            v.vibrate(valor);
-            TimeSleep(100);
-        } catch (Exception ex) {
-            Log.d("DroidBattery", "Vibrar: " + ex.getMessage());
-        }
-    }
-
-    private void TimeSleep(Integer seg) {
-        try {
-            Thread.sleep(seg);
-        } catch (Exception ex) {
-        }
-    }
-
-    private void updateViewsColorBattery(Context context, int color) {
-        Log.d("DroidBattery", "DroidWidget - updateViews()");
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
-        views.setTextColor(R.id.batteryText, color);
-
-        ComponentName componentName = new ComponentName(context, DroidWidget.class);
-        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-        appWidgetManager.updateAppWidget(componentName, views);
     }
 }
