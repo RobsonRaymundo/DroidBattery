@@ -25,6 +25,7 @@ public class DroidService extends Service implements TextToSpeech.OnInitListener
     }
 
     public static TextToSpeech tts;
+    public static boolean loopingBattery;
     private Context context;
 
     public static void StopStartService(Context context) {
@@ -41,7 +42,7 @@ public class DroidService extends Service implements TextToSpeech.OnInitListener
         catch (Exception ex)
         {
         }
-        Log.d("DroidBattery", "DroidWidget - StopStartService ");
+        Log.d("DroidBattery", "DroidService - StopStartService ");
     }
 
     @Override

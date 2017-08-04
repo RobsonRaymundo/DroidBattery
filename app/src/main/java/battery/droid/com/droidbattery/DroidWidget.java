@@ -67,6 +67,8 @@ public class DroidWidget extends AppWidgetProvider {
 
         //updateViews.setTextViewText(R.id.batteryText, msg);
 
+        DroidPreferences.SetInteger(context, "MIN_WIDTH", newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH));
+
         if (newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH) > 110)
         {
             updateViews.setTextViewTextSize(R.id.batteryText, TypedValue.COMPLEX_UNIT_DIP, 50);
@@ -84,7 +86,10 @@ public class DroidWidget extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
         Log.d("DroidBattery", "DroidWidget - onUpdate ");
+        ListenerOnClick(context, appWidgetManager);
+    }
 
+    public void ListenerOnClick(Context context, AppWidgetManager appWidgetManager) {
         RemoteViews remoteViews;
         ComponentName watchWidget;
 
@@ -93,6 +98,7 @@ public class DroidWidget extends AppWidgetProvider {
 
         remoteViews.setOnClickPendingIntent(R.id.batteryText, getPendingSelfIntent(context, ACTION_BATTERY_UPDATE));
         appWidgetManager.updateAppWidget(watchWidget, remoteViews);
+        Log.d("DroidBattery", "DroidWidget - ListenerOnClick ");
     }
 
     protected PendingIntent getPendingSelfIntent(Context context, String action) {
@@ -101,19 +107,54 @@ public class DroidWidget extends AppWidgetProvider {
         return PendingIntent.getBroadcast(context, 0, intent, 0);
     }
 
+    private void IHateSamsung(Context context, Intent intent){
+        Log.d("DroidBattery", "DroidWidget - onReceive - IHateSamsung ");
+        if (intent == null || intent.getAction() == null)
+            return;
+
+        if (intent.getAction().contentEquals("com.sec.android.widgetapp.APPWIDGET_RESIZE") &&
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            handleTouchWiz(context, intent);
+        }
+    }
+
     @Override
     public void onReceive(Context context, Intent intent) {
-        onAppWidgetOptionsChanged = true;
+     //   IHateSamsung(context, intent);
         super.onReceive(context, intent);
         Log.d("DroidBattery", "DroidWidget - onReceive ");
+        onAppWidgetOptionsChanged = true;
 
         if (ACTION_BATTERY_UPDATE.equals(intent.getAction())) {
             updateViewsColorBattery(context, Color.RED);
+            DroidService.loopingBattery = true;
             DroidService.StopStartService(context);
             Vibrar(context, 100);
             updateViewsColorBattery(context, Color.WHITE);
         }
     }
+
+
+    @TargetApi(16)
+    private void handleTouchWiz(Context context, Intent intent) {
+        Log.d("DroidBattery", "DroidWidget - handleTouchWiz ");
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+
+        int appWidgetId = intent.getIntExtra("widgetId", 0);
+        int widgetSpanX = intent.getIntExtra("widgetspanx", 0);
+        int widgetSpanY = intent.getIntExtra("widgetspany", 0);
+
+        if (appWidgetId > 0 && widgetSpanX > 0 && widgetSpanY > 0) {
+            Bundle newOptions = new Bundle();
+            // We have to convert these numbers for future use
+            newOptions.putInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, widgetSpanY * 74);
+            newOptions.putInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, widgetSpanX * 74);
+
+            onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
+        }
+    }
+
+
 
     @Override
     public void onRestored(Context context, int[] oldWidgetIds, int[] newWidgetIds) {

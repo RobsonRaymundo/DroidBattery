@@ -72,7 +72,22 @@ public class DroidInfoBattery implements TextToSpeech.OnInitListener {
             if (DroidWidget.onAppWidgetOptionsChanged || (!DroidConfigurationActivity.BatteryCurrent.contains(battery))) {
                 DroidWidget.onAppWidgetOptionsChanged = false;
                 DroidConfigurationActivity.BatteryCurrent = battery;
-                updateViewsInfoBattery(context, battery);
+
+                if (DroidService.loopingBattery) {
+                    DroidService.loopingBattery =false;
+
+                    Integer totalBattery =  Integer.parseInt(battery);
+
+                    for (Integer i = 0; i <= totalBattery; i++)
+                    {
+                        TimeSleep(10);
+                        updateViewsInfoBattery(context, i.toString());
+                    }
+                }
+                else
+                {
+                    updateViewsInfoBattery(context, battery);
+                }
 
                 if (NaoPertube(context)) {
                     if (battery.equals("100")) {
@@ -144,5 +159,12 @@ public class DroidInfoBattery implements TextToSpeech.OnInitListener {
     public void onInit(int status) {
 
 
+    }
+
+    private static void TimeSleep(Integer seg) {
+        try {
+            Thread.sleep(seg);
+        } catch (Exception ex) {
+        }
     }
 }
