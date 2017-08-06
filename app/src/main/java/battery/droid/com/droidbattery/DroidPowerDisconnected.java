@@ -14,6 +14,7 @@ import android.widget.Toast;
 public class DroidPowerDisconnected extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
+        DroidCommon.isCharging = false;
         DroidCommon.updateViewsColorBattery(context, Color.WHITE);
         DroidService.StopStartService(context);
         Log.d("DroidBattery", "DroidPowerDisconnected - onReceive ");

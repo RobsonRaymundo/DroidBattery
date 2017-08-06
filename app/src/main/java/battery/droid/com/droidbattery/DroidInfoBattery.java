@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.BatteryManager;
 import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
@@ -22,45 +23,6 @@ import java.util.Random;
 
 public class DroidInfoBattery implements TextToSpeech.OnInitListener {
     private TextToSpeech tts;
-
-    private static boolean NaoPertube(Context context) {
-
-        boolean informarBateriaCarregada = true;
-        try {
-            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-            boolean naoPertubeAtivado = sp.getBoolean("quiet", false);
-
-            if (naoPertubeAtivado) {
-                String startTime = sp.getString("startTime", "23:00");
-                String stopTime = sp.getString("stopTime", "09:00");
-
-                SimpleDateFormat sdfDate = new SimpleDateFormat("H:mm");
-                String currentTimeStamp = sdfDate.format(new Date());
-                int currentHour = Integer.parseInt(currentTimeStamp.split("[:]+")[0]);
-                int currentMinute = Integer.parseInt(currentTimeStamp.split("[:]+")[1]);
-
-                int startHour = Integer.parseInt(startTime.split("[:]+")[0]);
-                int startMinute = Integer.parseInt(startTime.split("[:]+")[1]);
-
-                int stopHour = Integer.parseInt(stopTime.split("[:]+")[0]);
-                int stopMinute = Integer.parseInt(stopTime.split("[:]+")[1]);
-
-                if (startHour < stopHour && currentHour > startHour && currentHour < stopHour)
-                    informarBateriaCarregada = false;
-                else if (startHour > stopHour && (currentHour > startHour || currentHour < stopHour))
-                    informarBateriaCarregada = false;
-                else if (currentHour == startHour && currentMinute >= startMinute)
-                    informarBateriaCarregada = false;
-                else if (currentHour == stopHour && currentMinute <= stopMinute)
-                    informarBateriaCarregada = false;
-
-                return informarBateriaCarregada;
-            }
-        } catch (Exception ex) {
-            Log.d("DroidInfoBattery", ex.getMessage());
-        }
-        return informarBateriaCarregada;
-    }
 
 
     public static BroadcastReceiver batteryReceiver = new BroadcastReceiver() {
@@ -82,20 +44,21 @@ public class DroidInfoBattery implements TextToSpeech.OnInitListener {
                 } else {
                     DroidCommon.updateViewsInfoBattery(context, battery);
                 }
-                if (NaoPertube(context)) {
-                    if (battery.equals("100")) {
-                        DroidCommon.updateViewsColorBattery(context, Color.BLUE);
-                        if (DroidCommon.InformarBateriaCarregada(context)) {
-                            try {
-                                DroidService.tts.speak("Bateria carregada, você já pode desconectar do carregador.", TextToSpeech.QUEUE_FLUSH, null);
+                if (DroidCommon.isCharging) {
+                    if (DroidCommon.NaoPertube(context)) {
+                        if (battery.equals("100")) {
+                            DroidCommon.updateViewsColorBattery(context, Color.BLUE);
+                            if (DroidCommon.InformarBateriaCarregada(context)) {
+                                try {
+                                    DroidService.tts.speak("Bateria carregada, você já pode desconectar do carregador.", TextToSpeech.QUEUE_FLUSH, null);
 
-                            } catch (Exception ex) {
-                                Log.d("DroidBattery", "DroidInfoBattery - BroadcastReceiver - Erro: " + ex.getMessage());
+                                } catch (Exception ex) {
+                                    Log.d("DroidBattery", "DroidInfoBattery - BroadcastReceiver - Erro: " + ex.getMessage());
+                                }
                             }
                         }
                     }
                 }
-                //   DroidConfigurationActivity.ColorCurrent = DroidConfigurationActivity.ColorCurrent + 1;
             }
         }
 
