@@ -53,9 +53,9 @@ public class DroidWidget extends AppWidgetProvider {
         Log.d("DroidBattery", "DroidWidget - onAppWidgetOptionsChanged ");
         onAppWidgetOptionsChanged = true;
 
-        RemoteViews updateViews=
+        RemoteViews updateViews =
                 new RemoteViews(context.getPackageName(), R.layout.widget_layout);
-        String msg=
+        String msg =
                 String.format(Locale.getDefault(),
                         "%d-%d",
                         newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT),
@@ -65,12 +65,9 @@ public class DroidWidget extends AppWidgetProvider {
 
         DroidPreferences.SetInteger(context, "MIN_WIDTH", newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH));
 
-        if (newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH) > 110)
-        {
+        if (newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH) > 110) {
             updateViews.setTextViewTextSize(R.id.batteryText, TypedValue.COMPLEX_UNIT_DIP, 50);
-        }
-        else
-        {
+        } else {
             updateViews.setTextViewTextSize(R.id.batteryText, TypedValue.COMPLEX_UNIT_DIP, 30);
         }
 
@@ -105,17 +102,13 @@ public class DroidWidget extends AppWidgetProvider {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-     //   IHateSamsung(context, intent);
         super.onReceive(context, intent);
         Log.d("DroidBattery", "DroidWidget - onReceive ");
         onAppWidgetOptionsChanged = true;
-
         if (ACTION_BATTERY_UPDATE.equals(intent.getAction())) {
-            DroidCommon.updateViewsColorBattery(context, Color.RED);
             DroidService.loopingBattery = true;
             DroidService.StopStartService(context);
             DroidCommon.Vibrar(context, 50);
-            DroidCommon.updateViewsColorBattery(context, Color.WHITE);
         }
     }
 

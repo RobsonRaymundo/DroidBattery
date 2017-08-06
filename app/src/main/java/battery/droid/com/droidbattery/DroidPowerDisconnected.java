@@ -3,6 +3,7 @@ package battery.droid.com.droidbattery;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -13,6 +14,7 @@ import android.widget.Toast;
 public class DroidPowerDisconnected extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
+        DroidCommon.updateViewsColorBattery(context, Color.WHITE);
         DroidService.StopStartService(context);
         Log.d("DroidBattery", "DroidPowerDisconnected - onReceive ");
     }

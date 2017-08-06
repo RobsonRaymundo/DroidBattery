@@ -84,6 +84,7 @@ public class DroidInfoBattery implements TextToSpeech.OnInitListener {
                 }
                 if (NaoPertube(context)) {
                     if (battery.equals("100")) {
+                        DroidCommon.updateViewsColorBattery(context, Color.BLUE);
                         if (DroidCommon.InformarBateriaCarregada(context)) {
                             try {
                                 DroidService.tts.speak("Bateria carregada, você já pode desconectar do carregador.", TextToSpeech.QUEUE_FLUSH, null);

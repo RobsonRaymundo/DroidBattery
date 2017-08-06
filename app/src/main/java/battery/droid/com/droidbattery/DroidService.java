@@ -12,6 +12,8 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.io.FileDescriptor;
+import java.io.PrintWriter;
 import java.util.Locale;
 
 /**
@@ -72,7 +74,6 @@ public class DroidService extends Service implements TextToSpeech.OnInitListener
     @Override
     public void onDestroy() {
         Log.d("DroidBattery", "DroidService - onDestroy " );
-        DroidCommon.updateViewsInfoBattery(context, "?");
         //Toast.makeText(this, "DroidBattery - DroidService - onDestroy ", Toast.LENGTH_LONG).show();
         super.onDestroy();
     }
@@ -105,6 +106,9 @@ public class DroidService extends Service implements TextToSpeech.OnInitListener
 
     }
 
-
-
+    @Override
+    protected void dump(FileDescriptor fd, PrintWriter writer, String[] args) {
+        DroidCommon.updateViewsColorBattery(context, Color.GRAY);
+        super.dump(fd, writer, args);
+    }
 }
