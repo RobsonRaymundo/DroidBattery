@@ -114,7 +114,7 @@ public class DroidWidget extends AppWidgetProvider {
             DroidCommon.updateViewsColorBattery(context, Color.RED);
             DroidService.loopingBattery = true;
             DroidService.StopStartService(context);
-            DroidCommon.Vibrar(context, 100);
+            DroidCommon.Vibrar(context, 50);
             DroidCommon.updateViewsColorBattery(context, Color.WHITE);
         }
     }

@@ -5,6 +5,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.IBinder;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.Nullable;
@@ -43,6 +44,7 @@ public class DroidService extends Service implements TextToSpeech.OnInitListener
         {
         }
         Log.d("DroidBattery", "DroidService - StopStartService ");
+
     }
 
     @Override
@@ -70,6 +72,7 @@ public class DroidService extends Service implements TextToSpeech.OnInitListener
     @Override
     public void onDestroy() {
         Log.d("DroidBattery", "DroidService - onDestroy " );
+        DroidCommon.updateViewsInfoBattery(context, "?");
         //Toast.makeText(this, "DroidBattery - DroidService - onDestroy ", Toast.LENGTH_LONG).show();
         super.onDestroy();
     }
@@ -78,6 +81,7 @@ public class DroidService extends Service implements TextToSpeech.OnInitListener
     public boolean onUnbind(Intent intent) {
         Log.d("DroidBattery", "DroidService - onUnbind " );
         //Toast.makeText(this, "DroidBattery - DroidService - onUnbind ", Toast.LENGTH_LONG).show();
+        DroidCommon.updateViewsColorBattery(context, Color.GRAY);
         return super.onUnbind(intent);
     }
 
@@ -85,6 +89,7 @@ public class DroidService extends Service implements TextToSpeech.OnInitListener
     public void onLowMemory() {
         Log.d("DroidBattery", "DroidService - onLowMemory " );
         //Toast.makeText(this, "DroidBattery - DroidService - onLowMemory ", Toast.LENGTH_LONG).show();
+        DroidCommon.updateViewsColorBattery(context, Color.GRAY);
         super.onLowMemory();
     }
 

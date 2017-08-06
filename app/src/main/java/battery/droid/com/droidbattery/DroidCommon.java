@@ -114,12 +114,17 @@ public class DroidCommon {
         Log.d("DroidBattery", "DroidWidget - updateViews()");
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
         views.setTextColor(R.id.batteryText, color);
-
+        Integer min_width = DroidPreferences.GetInteger(context, "MIN_WIDTH");
+        if (min_width > 110)
+        {
+            views.setTextViewTextSize(R.id.batteryText, TypedValue.COMPLEX_UNIT_DIP , 50);
+        }
+        else
+        {
+            views.setTextViewTextSize(R.id.batteryText, TypedValue.COMPLEX_UNIT_DIP , 30);
+        }
         ComponentName componentName = new ComponentName(context, DroidWidget.class);
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
         appWidgetManager.updateAppWidget(componentName, views);
     }
-
-
-
 }
