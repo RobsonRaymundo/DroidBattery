@@ -5,18 +5,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.util.Log;
-import android.widget.Toast;
 
 /**
- * Created by Robson on 03/05/2017.
+ * Created by Robson on 12/08/2017.
  */
 
-public class DroidPowerConnected extends BroadcastReceiver {
+public class DroidBatteryLow extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        DroidCommon.isCharging = true;
-        DroidCommon.updateViewsColorBattery(context, Color.GREEN);
+        DroidCommon.updateViewsColorBattery(context, Color.RED);
         DroidService.StartService(context);
-        Log.d("DroidBattery", "DroidPowerConnected - onReceive ");
+        Log.d("DroidBattery", "DroidBatteryLow - onReceive ");
     }
 }

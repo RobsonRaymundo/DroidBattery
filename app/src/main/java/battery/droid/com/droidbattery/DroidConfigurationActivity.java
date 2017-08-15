@@ -1,6 +1,7 @@
 package battery.droid.com.droidbattery;
 
 import android.annotation.TargetApi;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -36,6 +37,8 @@ public class DroidConfigurationActivity extends PreferenceActivity {
         super.onCreate(savedInstanceState);
         SetPreference();
       //  DroidService.StopStartService(context);
+        Intent intent = new Intent(context, DroidServiceScreen.class);
+        startService(intent);
     }
 
     private void SetPreference(){

@@ -1,5 +1,6 @@
 package battery.droid.com.droidbattery;
 
+import android.app.ActivityManager;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -171,4 +172,7 @@ public class DroidCommon {
         }
         return informarBateriaCarregada;
     }
+
+
+
 }

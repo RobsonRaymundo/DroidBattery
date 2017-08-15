@@ -38,7 +38,7 @@ public class DroidInfoBattery implements TextToSpeech.OnInitListener {
                     DroidService.loopingBattery = false;
                     Integer totalBattery = Integer.parseInt(battery);
                     for (Integer i = 0; i <= totalBattery; i++) {
-                        DroidCommon.TimeSleep(10);
+                        DroidCommon.TimeSleep(1);
                         DroidCommon.updateViewsInfoBattery(context, i.toString());
                     }
                 } else {

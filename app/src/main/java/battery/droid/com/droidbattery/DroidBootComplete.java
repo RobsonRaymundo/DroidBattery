@@ -17,7 +17,7 @@ public class DroidBootComplete extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         DroidCommon.updateViewsSizeBattery(context);
-        DroidService.StopStartService(context);
+        DroidService.StartService(context);
         Log.d("DroidBattery", "DroidBootComplete - onReceive ");
         DroidCommon.onUpdateDroidWidget(context);
     }

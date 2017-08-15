@@ -36,7 +36,7 @@ public class DroidWidget extends AppWidgetProvider {
     @Override
     public void onEnabled(Context context) {
         super.onEnabled(context);
-        DroidService.StopStartService(context);
+        DroidService.StartService(context);
         Log.d("DroidBattery", "DroidWidget - onEnabled ");
     }
 
