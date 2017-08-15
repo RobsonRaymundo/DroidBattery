@@ -40,7 +40,7 @@ public class DroidConfigurationActivity extends PreferenceActivity {
         Intent intent = new Intent(context, DroidServiceScreen.class);
         startService(intent);
 
-        //DroidServiceScreen.StopServiceScreen(context); Teste para ver o restart do service screen
+        //DroidServiceScreen.StopServiceScreen(context); // Teste para ver o restart do service screen
     }
 
     private void SetPreference(){

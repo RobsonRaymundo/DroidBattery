@@ -120,22 +120,6 @@ public class DroidService extends Service implements TextToSpeech.OnInitListener
     }
 
     @Override
-    public boolean onUnbind(Intent intent) {
-        Log.d("DroidBattery", "DroidService - onUnbind ");
-        //Toast.makeText(this, "DroidBattery - DroidService - onUnbind ", Toast.LENGTH_LONG).show();
-        DroidCommon.updateViewsInfoBattery(context, "Unbind");
-        return super.onUnbind(intent);
-    }
-
-    @Override
-    public void onLowMemory() {
-        Log.d("DroidBattery", "DroidService - onLowMemory ");
-        //Toast.makeText(this, "DroidBattery - DroidService - onLowMemory ", Toast.LENGTH_LONG).show();
-        DroidCommon.updateViewsInfoBattery(context, "LowMemory");
-        super.onLowMemory();
-    }
-
-    @Override
     public boolean stopService(Intent name) {
         tts.shutdown();
         return super.stopService(name);
@@ -146,25 +130,6 @@ public class DroidService extends Service implements TextToSpeech.OnInitListener
     public void onInit(int status) {
 
     }
-
-    @Override
-    protected void dump(FileDescriptor fd, PrintWriter writer, String[] args) {
-        DroidCommon.updateViewsInfoBattery(context, "dump");
-        super.dump(fd, writer, args);
-    }
-
-    @Override
-    public void onTaskRemoved(Intent rootIntent) {
-        DroidCommon.updateViewsInfoBattery(context, "TaskRemoved");
-        super.onTaskRemoved(rootIntent);
-    }
-
-    @Override
-    public void onTrimMemory(int level) {
-        DroidCommon.updateViewsInfoBattery(context, "TrimMemory");
-        super.onTrimMemory(level);
-    }
-
 
     private static boolean isMyServiceRunning(Context context) {
         ActivityManager manager = (ActivityManager) context.getSystemService(ACTIVITY_SERVICE);
