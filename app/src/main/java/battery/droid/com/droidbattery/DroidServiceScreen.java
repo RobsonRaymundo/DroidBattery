@@ -2,6 +2,7 @@ package battery.droid.com.droidbattery;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
@@ -44,5 +45,16 @@ public class DroidServiceScreen extends Service {
         super.onStartCommand(intent, flags, startId);
         DroidCommon.TimeSleep(2000);
         return START_STICKY;
+    }
+
+    public static void StopServiceScreen(Context context) {
+
+        Intent intentService = new Intent(context, DroidServiceScreen.class);
+        try {
+            context.stopService(intentService);
+        } catch (Exception ex) {
+        }
+        Log.d("DroidBattery", "DroidService - StopService ");
+
     }
 }

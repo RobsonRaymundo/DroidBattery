@@ -13,13 +13,17 @@ import android.widget.RemoteViews;
  * Created by Robson on 03/05/2017.
  */
 
-public class DroidBootComplete extends BroadcastReceiver {
+public class DroidSetStatus extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         DroidCommon.updateViewsSizeBattery(context);
+        DroidService.loopingBattery = true;
+        DroidWidget.onAppWidgetOptionsChanged = true;
+        DroidService.StopService(context);
+        DroidCommon.TimeSleep(1000);
         DroidService.StartService(context);
-        Log.d("DroidBattery", "DroidBootComplete - onReceive ");
         DroidCommon.onUpdateDroidWidget(context);
+        Log.d("DroidBattery", "DroidSetStatus - onReceive ");
     }
 
 

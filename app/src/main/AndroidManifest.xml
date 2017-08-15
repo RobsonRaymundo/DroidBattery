@@ -30,30 +30,12 @@
             android:name=".DroidServiceScreen"
             android:enabled="true" />
 
-        <receiver android:name=".DroidBootComplete">
+        <receiver android:name=".DroidSetStatus">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </receiver>
-
-        <receiver android:name=".DroidPackageReplaced">
-            <intent-filter>
-                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </receiver>
-
-        <receiver android:name=".DroidPowerConnected">
-            <intent-filter>
                 <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </receiver>
-
-        <receiver android:name=".DroidPowerDisconnected">
-            <intent-filter>
                 <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
@@ -66,11 +48,6 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_info" />
-        </receiver>
-        <receiver android:name=".DroidBatteryLow">
-            <intent-filter>
-                <action android:name="android.intent.action.ACTION_BATTERY_LOW" />
-            </intent-filter>
         </receiver>
 
         <receiver

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.os.BatteryManager;
 import android.os.IBinder;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.Nullable;
@@ -38,6 +39,7 @@ public class DroidService extends Service implements TextToSpeech.OnInitListener
         try {
             context.stopService(intentService);
             Log.d("DroidBattery", "DroidService - StopService ");
+
         } catch (Exception ex) {
             Log.d("DroidBattery", "DroidService - StopService - Erro " + ex.getMessage());
         }
@@ -73,11 +75,27 @@ public class DroidService extends Service implements TextToSpeech.OnInitListener
         }
     }
 
+    private void SetStatusBattery(Intent batteryStatus) {
+        int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+        boolean charging = status == BatteryManager.BATTERY_STATUS_CHARGING;
+        boolean chargingFull = status == BatteryManager.BATTERY_STATUS_FULL;
+        DroidCommon.isCharging = charging || chargingFull;
+        if (charging) {
+            DroidCommon.updateViewsColorBattery(context, Color.GREEN);
+        } else if (chargingFull) {
+            DroidCommon.updateViewsColorBattery(context, Color.BLUE);
+        } else {
+            DroidCommon.updateViewsColorBattery(context, Color.WHITE);
+        }
+        //Toast.makeText(context, String.valueOf(DroidCommon.isCharging), Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     public void onStart(Intent intent, int startId) {
         super.onStart(intent, startId);
         mServiceIntent = intent;
-        registerReceiver(DroidInfoBattery.batteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        SetStatusBattery(registerReceiver(DroidInfoBattery.batteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED)));
+
         Log.d("DroidBattery", "DroidService - onStart ");
     }
 
@@ -148,7 +166,7 @@ public class DroidService extends Service implements TextToSpeech.OnInitListener
     }
 
 
-    public static boolean isMyServiceRunning(Context context) {
+    private static boolean isMyServiceRunning(Context context) {
         ActivityManager manager = (ActivityManager) context.getSystemService(ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
             if (DroidService.class.getName().equals(service.service.getClassName())) {
