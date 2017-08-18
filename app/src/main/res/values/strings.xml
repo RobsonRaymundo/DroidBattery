@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Droid Battery</string>
+    <string name="app_name">Level Battery</string>
     <string name="txt_tela_Config">Tela de Configuração</string>
     <string name="txt_titulo">Síntese de Voz</string>
     <string name="spf_fala_bateria_carregada">Ativar a síntese de Voz do Google para informar quando a bateria estiver totalmente carregada?</string>
