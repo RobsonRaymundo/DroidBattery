@@ -14,8 +14,10 @@ public class DroidScreenOnOff extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
-            DroidService.StopService(context);
-            Log.d("DroidBattery", "DroidScreenOnOff - onReceive - Off ");
+            if (!DroidCommon.isCharging) {
+                DroidService.StopService(context);
+                Log.d("DroidBattery", "DroidScreenOnOff - onReceive - Off ");
+            }
 
         } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
             DroidService.StartService(context);
