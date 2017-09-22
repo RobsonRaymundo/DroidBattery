@@ -1,29 +1,16 @@
 package battery.droid.com.droidbattery;
 
-import android.appwidget.AppWidgetManager;
+
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.os.BatteryManager;
-import android.preference.PreferenceManager;
-import android.speech.tts.TextToSpeech;
 import android.util.Log;
-import android.widget.RemoteViews;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Random;
 
 /**
  * Created by Robson on 02/05/2017.
  */
 
-public class DroidInfoBattery implements TextToSpeech.OnInitListener {
-    private TextToSpeech tts;
-
+public class DroidInfoBattery {
 
     public static BroadcastReceiver batteryReceiver = new BroadcastReceiver() {
         @Override
@@ -45,15 +32,14 @@ public class DroidInfoBattery implements TextToSpeech.OnInitListener {
                     DroidCommon.updateViewsInfoBattery(context, battery);
                 }
                 if (DroidCommon.isCharging) {
-                    if (DroidCommon.NaoPertube(context)) {
-                        if (battery.equals("100")) {
-                            if (DroidCommon.InformarBateriaCarregada(context)) {
-                                try {
-                                    DroidService.tts.speak("Bateria carregada, você já pode desconectar do carregador.", TextToSpeech.QUEUE_FLUSH, null);
-
-                                } catch (Exception ex) {
-                                    Log.d("DroidBattery", "DroidInfoBattery - BroadcastReceiver - Erro: " + ex.getMessage());
-                                }
+                    if (battery.equals("100")) {
+                        if (DroidCommon.InformarBateriaCarregada(context)) {
+                            try {
+                                Intent intentTTS = new Intent(context, DroidTTS.class);
+                                DroidTTS.VozBateriaCarregada = true;
+                                context.startService(intentTTS);
+                            } catch (Exception ex) {
+                                Log.d("DroidBattery", "DroidInfoBattery - BroadcastReceiver - Erro: " + ex.getMessage());
                             }
                         }
                     }
@@ -62,12 +48,5 @@ public class DroidInfoBattery implements TextToSpeech.OnInitListener {
         }
 
     };
-
-    @Override
-    public void onInit(int status) {
-
-
-    }
-
 
 }

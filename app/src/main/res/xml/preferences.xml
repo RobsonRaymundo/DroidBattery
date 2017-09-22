@@ -7,7 +7,21 @@
             android:defaultValue="true"
             android:key="spf_bateriaCarregada"
             android:summary="@string/spf_fala_bateria_carregada"
-            android:title="@string/txt_titulo"></SwitchPreference>
+            android:title="@string/txt_titulo_bateria_carregada"></SwitchPreference>
+
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="spf_falaBootCompletado"
+            android:summary="@string/spf_fala_boot_completado"
+            android:title="@string/txt_titulo_fala_boot_completado"></SwitchPreference>
+
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="spf_bootCompletado"
+            android:summary="@string/spf_boot_completado"
+            android:title="@string/txt_titulo_boot_completado"></SwitchPreference>
 
 
         <SwitchPreference

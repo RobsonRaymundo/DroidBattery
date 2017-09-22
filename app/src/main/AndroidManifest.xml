@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.BATTERY_STATS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <uses-feature android:name="android.hardware.microphone" />
 
@@ -25,7 +26,11 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".DroidAlertDialogActivity" android:theme="@style/AppTheme.NoActionBar"/>
+
         <service android:name=".DroidService"></service>
+
+        <service android:name=".DroidTTS"/>
         <service
             android:name=".DroidServiceScreen"
             android:enabled="true" />

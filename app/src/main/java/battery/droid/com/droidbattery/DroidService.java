@@ -2,34 +2,28 @@ package battery.droid.com.droidbattery;
 
 import android.app.ActivityManager;
 import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.BatteryManager;
 import android.os.IBinder;
-import android.speech.tts.TextToSpeech;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.Toast;
 
-import java.io.FileDescriptor;
-import java.io.PrintWriter;
 import java.util.Locale;
 
 /**
  * Created by Robson on 02/05/2017.
  */
 
-public class DroidService extends Service implements TextToSpeech.OnInitListener {
+public class DroidService extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
 
-    public static TextToSpeech tts;
     public static boolean loopingBattery;
     private Context context;
     public static Intent mServiceIntent;
@@ -105,8 +99,6 @@ public class DroidService extends Service implements TextToSpeech.OnInitListener
         Log.d("DroidBattery", "DroidService - onCreate ");
         try {
             context = getBaseContext();
-            tts = new TextToSpeech(context, this);
-            tts.setLanguage(Locale.getDefault());
         } catch (Exception ex) {
             Log.d("DroidBattery", "DroidService - onCreate - Erro: " + ex.getMessage());
         }
@@ -121,14 +113,7 @@ public class DroidService extends Service implements TextToSpeech.OnInitListener
 
     @Override
     public boolean stopService(Intent name) {
-        tts.shutdown();
         return super.stopService(name);
-
-    }
-
-    @Override
-    public void onInit(int status) {
-
     }
 
     private static boolean isMyServiceRunning(Context context) {

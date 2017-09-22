@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.speech.tts.TextToSpeech;
 import android.support.v7.app.ActionBar;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -30,20 +31,21 @@ public class DroidConfigurationActivity extends PreferenceActivity {
 
     public static int ColorCurrent = 0;
     public static String BatteryCurrent = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         context = getBaseContext();
-        Log.d("DroidBattery", "DroidConfigurationActivity - onCreate: " );
+        Log.d("DroidBattery", "DroidConfigurationActivity - onCreate: ");
         super.onCreate(savedInstanceState);
         SetPreference();
-      //  DroidService.StopStartService(context);
+        //  DroidService.StopStartService(context);
         Intent intent = new Intent(context, DroidServiceScreen.class);
         startService(intent);
 
         //DroidServiceScreen.StopServiceScreen(context); // Teste para ver o restart do service screen
     }
 
-    private void SetPreference(){
+    private void SetPreference() {
         addPreferencesFromResource(R.xml.preferences);
         Toast.makeText(this, "Widget Droid Battery está pronto para ser adicionado!",
                 Toast.LENGTH_LONG).show();
@@ -60,7 +62,7 @@ public class DroidConfigurationActivity extends PreferenceActivity {
         start.setSummary(DroidCommon.handleTime(context, mPrefs.getString("startTime", "23:00")));
         start.setOnPreferenceChangeListener(listener);
 
-        Preference stop  = (Preference) findPreference("stopTime");
+        Preference stop = (Preference) findPreference("stopTime");
         stop.setSummary(DroidCommon.handleTime(context, mPrefs.getString("stopTime", "09:00")));
         stop.setOnPreferenceChangeListener(listener);
     }
@@ -68,13 +70,10 @@ public class DroidConfigurationActivity extends PreferenceActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        try
-        {
+        try {
             MenuInflater inflater = getMenuInflater();
 
-        }
-        catch(Exception ex)
-        {
+        } catch (Exception ex) {
         }
 
         return true;

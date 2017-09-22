@@ -1,13 +1,10 @@
 package battery.droid.com.droidbattery;
 
-import android.appwidget.AppWidgetManager;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
-import android.util.TypedValue;
-import android.widget.RemoteViews;
 
 /**
  * Created by Robson on 03/05/2017.
@@ -24,6 +21,21 @@ public class DroidSetStatus extends BroadcastReceiver {
         DroidService.StartService(context);
         DroidCommon.onUpdateDroidWidget(context);
         Log.d("DroidBattery", "DroidSetStatus - onReceive ");
+
+        if (intent.getAction().contains("android.intent.action.BOOT_COMPLETED") )
+        {
+            if (DroidCommon.ExibirDialogBootCompletado(context)) {
+                Intent i = new Intent(context, DroidAlertDialogActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(i);
+            }
+
+            if (DroidCommon.InformarBootCompletado(context)) {
+                Intent intentTTS = new Intent(context, DroidTTS.class);
+                DroidTTS.VozDispositivoReiniciado = true;
+                context.startService(intentTTS);
+            }
+        }
     }
 
 

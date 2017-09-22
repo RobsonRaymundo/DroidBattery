@@ -88,6 +88,29 @@ public class DroidCommon {
         return spf;
     }
 
+    public static boolean ExibirDialogBootCompletado(final Context context) {
+        boolean spf = false;
+        try {
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+            spf = sp.getBoolean("spf_bootCompletado", true);
+        } catch (Exception ex) {
+            Log.d("DroidInfoBattery", ex.getMessage());
+        }
+        return spf;
+    }
+
+
+    public static boolean InformarBootCompletado(final Context context) {
+        boolean spf = false;
+        try {
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+            spf = sp.getBoolean("spf_falaBootCompletado", true);
+        } catch (Exception ex) {
+            Log.d("DroidInfoBattery", ex.getMessage());
+        }
+        return spf;
+    }
+
     public static void updateViewsInfoBattery(Context context, String batteryLevel) {
         Log.d("DroidBattery", "DroidInfoBattery - updateViews()");
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);

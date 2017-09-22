@@ -1,8 +1,15 @@
 <resources>
     <string name="app_name">Level Battery</string>
     <string name="txt_tela_Config">Tela de Configuração</string>
-    <string name="txt_titulo">Síntese de Voz</string>
+    <string name="txt_titulo_bateria_carregada">Voz bateria carregada</string>
     <string name="spf_fala_bateria_carregada">Ativar a síntese de Voz do Google para informar quando a bateria estiver totalmente carregada?</string>
+
+    <string name="txt_titulo_boot_completado">Exibir um alerta</string>
+    <string name="spf_boot_completado">Exibir um alerta com as informações de data e hora depois que o dispositivo for reiniciado?</string>
+
+    <string name="txt_titulo_fala_boot_completado">Voz reiniciar o dispositivo</string>
+    <string name="spf_fala_boot_completado">Ativar a síntese de Voz do Google para informar depois que o dispositivo for reiniciado?</string>
+
     <string name="quietSum">Não pertube entre as horas abaixo</string>
     <string name="quietHours">Não perturbe</string>
     <string name="startTime">Hora inicial</string>
