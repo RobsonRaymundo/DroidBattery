@@ -8,37 +8,21 @@
             android:key="spf_bateriaCarregada"
             android:summary="@string/spf_fala_bateria_carregada"
             android:title="@string/txt_titulo_bateria_carregada"></SwitchPreference>
-
-
         <SwitchPreference
             android:defaultValue="false"
-            android:key="spf_falaBootCompletado"
-            android:summary="@string/spf_fala_boot_completado"
-            android:title="@string/txt_titulo_fala_boot_completado"></SwitchPreference>
-
-
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="spf_bootCompletado"
-            android:summary="@string/spf_boot_completado"
-            android:title="@string/txt_titulo_boot_completado"></SwitchPreference>
-
-
-        <SwitchPreference
             android:dependency="spf_bateriaCarregada"
-            android:defaultValue="false"
             android:key="quiet"
             android:summary="@string/quietSum"
             android:title="@string/quietHours" />
         <battery.droid.com.droidbattery.DroidTime
-            android:dependency="quiet"
             android:defaultValue="23:00"
+            android:dependency="quiet"
             android:key="startTime"
             android:showDefault="true"
             android:title="@string/startTime" />
         <battery.droid.com.droidbattery.DroidTime
-            android:dependency="quiet"
             android:defaultValue="09:00"
+            android:dependency="quiet"
             android:key="stopTime"
             android:showDefault="true"
             android:title="@string/stopTime" />

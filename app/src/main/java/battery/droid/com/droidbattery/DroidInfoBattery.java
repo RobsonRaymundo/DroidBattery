@@ -36,7 +36,6 @@ public class DroidInfoBattery {
                         if (DroidCommon.InformarBateriaCarregada(context)) {
                             try {
                                 Intent intentTTS = new Intent(context, DroidTTS.class);
-                                DroidTTS.VozBateriaCarregada = true;
                                 context.startService(intentTTS);
                             } catch (Exception ex) {
                                 Log.d("DroidBattery", "DroidInfoBattery - BroadcastReceiver - Erro: " + ex.getMessage());
