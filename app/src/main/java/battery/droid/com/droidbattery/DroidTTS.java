@@ -25,7 +25,7 @@ public class DroidTTS extends Service implements TextToSpeech.OnInitListener {
 
     @Override
     public void onInit(int i) {
-        if (DroidCommon.NaoPertube(context)) {
+        if (DroidCommon.InformarBateriaCarregada(context)) {
             VozBateriaCarregada();
         }
     }

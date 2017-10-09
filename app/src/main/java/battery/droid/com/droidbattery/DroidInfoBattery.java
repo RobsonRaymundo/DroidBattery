@@ -18,9 +18,9 @@ public class DroidInfoBattery {
             Log.d("DroidBattery", "DroidInfoBattery - BroadcastReceiver ");
             int level = intent.getIntExtra("level", 0);
             String battery = String.valueOf(level);
-            if (DroidWidget.onAppWidgetOptionsChanged || (!DroidConfigurationActivity.BatteryCurrent.contains(battery))) {
+            if (DroidWidget.onAppWidgetOptionsChanged || (!DroidCommon.BatteryCurrent.contains(battery))) {
                 DroidWidget.onAppWidgetOptionsChanged = false;
-                DroidConfigurationActivity.BatteryCurrent = battery;
+                DroidCommon.BatteryCurrent = battery;
                 if (DroidService.loopingBattery) {
                     DroidService.loopingBattery = false;
                     Integer totalBattery = Integer.parseInt(battery);
@@ -31,21 +31,15 @@ public class DroidInfoBattery {
                 } else {
                     DroidCommon.updateViewsInfoBattery(context, battery);
                 }
-                if (DroidCommon.isCharging) {
-                    if (battery.equals("100")) {
-                        if (DroidCommon.InformarBateriaCarregada(context)) {
-                            try {
-                                Intent intentTTS = new Intent(context, DroidTTS.class);
-                                context.startService(intentTTS);
-                            } catch (Exception ex) {
-                                Log.d("DroidBattery", "DroidInfoBattery - BroadcastReceiver - Erro: " + ex.getMessage());
-                            }
-                        }
+                if (DroidCommon.InformarBateriaCarregada(context)) {
+                    try {
+                        Intent intentTTS = new Intent(context, DroidTTS.class);
+                        context.startService(intentTTS);
+                    } catch (Exception ex) {
+                        Log.d("DroidBattery", "DroidInfoBattery - BroadcastReceiver - Erro: " + ex.getMessage());
                     }
                 }
             }
         }
-
     };
-
 }

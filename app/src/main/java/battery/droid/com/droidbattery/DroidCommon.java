@@ -1,6 +1,5 @@
 package battery.droid.com.droidbattery;
 
-import android.app.ActivityManager;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -22,15 +21,16 @@ import java.util.Date;
 public class DroidCommon {
 
     public static boolean isCharging;
+    public static String BatteryCurrent = "";
 
     public static String handleTime(Context context, String time) {
-        String[] timeParts=time.split(":");
-        int lastHour=Integer.parseInt(timeParts[0]);
-        int lastMinute=Integer.parseInt(timeParts[1]);
+        String[] timeParts = time.split(":");
+        int lastHour = Integer.parseInt(timeParts[0]);
+        int lastMinute = Integer.parseInt(timeParts[1]);
 
         boolean is24HourFormat = DateFormat.is24HourFormat(context);
 
-        if(is24HourFormat) {
+        if (is24HourFormat) {
             return ((lastHour < 10) ? "0" : "")
                     + Integer.toString(lastHour)
                     + ":" + ((lastMinute < 10) ? "0" : "")
@@ -44,15 +44,12 @@ public class DroidCommon {
         }
     }
 
-    public static void onUpdateDroidWidget(Context context)
-    {
+    public static void onUpdateDroidWidget(Context context) {
         try {
             DroidWidget droidWidget = new DroidWidget();
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
             droidWidget.onUpdate(context, appWidgetManager, null);
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             Log.d("DroidBattery", "DroidBootComplete - onReceive - Erro: " + ex.getMessage());
         }
     }
@@ -63,13 +60,10 @@ public class DroidCommon {
 
         Integer min_width = DroidPreferences.GetInteger(context, "MIN_WIDTH");
 
-        if (min_width > 110)
-        {
-            views.setTextViewTextSize(R.id.batteryText, TypedValue.COMPLEX_UNIT_DIP , 50);
-        }
-        else
-        {
-            views.setTextViewTextSize(R.id.batteryText, TypedValue.COMPLEX_UNIT_DIP , 30);
+        if (min_width > 110) {
+            views.setTextViewTextSize(R.id.batteryText, TypedValue.COMPLEX_UNIT_DIP, 50);
+        } else {
+            views.setTextViewTextSize(R.id.batteryText, TypedValue.COMPLEX_UNIT_DIP, 30);
         }
 
         ComponentName componentName = new ComponentName(context, DroidWidget.class);
@@ -77,34 +71,11 @@ public class DroidCommon {
         appWidgetManager.updateAppWidget(componentName, views);
     }
 
-    public static boolean InformarBateriaCarregada(final Context context) {
+    public static boolean PreferenceBateriaCarregada(final Context context) {
         boolean spf = false;
         try {
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
             spf = sp.getBoolean("spf_bateriaCarregada", true);
-        } catch (Exception ex) {
-            Log.d("DroidInfoBattery", ex.getMessage());
-        }
-        return spf;
-    }
-
-    public static boolean ExibirDialogBootCompletado(final Context context) {
-        boolean spf = false;
-        try {
-            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-            spf = sp.getBoolean("spf_bootCompletado", true);
-        } catch (Exception ex) {
-            Log.d("DroidInfoBattery", ex.getMessage());
-        }
-        return spf;
-    }
-
-
-    public static boolean InformarBootCompletado(final Context context) {
-        boolean spf = false;
-        try {
-            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-            spf = sp.getBoolean("spf_falaBootCompletado", true);
         } catch (Exception ex) {
             Log.d("DroidInfoBattery", ex.getMessage());
         }
@@ -144,13 +115,10 @@ public class DroidCommon {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
         views.setTextColor(R.id.batteryText, color);
         Integer min_width = DroidPreferences.GetInteger(context, "MIN_WIDTH");
-        if (min_width > 110)
-        {
-            views.setTextViewTextSize(R.id.batteryText, TypedValue.COMPLEX_UNIT_DIP , 50);
-        }
-        else
-        {
-            views.setTextViewTextSize(R.id.batteryText, TypedValue.COMPLEX_UNIT_DIP , 30);
+        if (min_width > 110) {
+            views.setTextViewTextSize(R.id.batteryText, TypedValue.COMPLEX_UNIT_DIP, 50);
+        } else {
+            views.setTextViewTextSize(R.id.batteryText, TypedValue.COMPLEX_UNIT_DIP, 30);
         }
         ComponentName componentName = new ComponentName(context, DroidWidget.class);
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
@@ -196,6 +164,10 @@ public class DroidCommon {
         return informarBateriaCarregada;
     }
 
-
-
+    public static boolean InformarBateriaCarregada(Context context) {
+        return DroidCommon.PreferenceBateriaCarregada(context) &&
+                DroidCommon.NaoPertube(context) &&
+                DroidCommon.isCharging &&
+                DroidCommon.BatteryCurrent.equals("100");
+    }
 }

@@ -1,26 +1,16 @@
 package battery.droid.com.droidbattery;
 
-import android.annotation.TargetApi;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-import android.speech.tts.TextToSpeech;
-import android.support.v7.app.ActionBar;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.widget.Toast;
-
-import java.util.List;
 
 /**
  * Created by Robson on 02/05/2017.
@@ -28,9 +18,6 @@ import java.util.List;
 
 public class DroidConfigurationActivity extends PreferenceActivity {
     private Context context;
-
-    public static int ColorCurrent = 0;
-    public static String BatteryCurrent = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
