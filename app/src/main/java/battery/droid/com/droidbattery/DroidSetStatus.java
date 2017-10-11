@@ -20,6 +20,21 @@ public class DroidSetStatus extends BroadcastReceiver {
         DroidCommon.TimeSleep(1000);
         DroidService.StartService(context);
         DroidCommon.onUpdateDroidWidget(context);
+
+        try {
+            Intent intentTTS = new Intent(context, DroidTTS.class);
+            if (intent.getAction().equals(Intent.ACTION_POWER_CONNECTED)) {
+                DroidCommon.DispositivoConectado = true;
+            }
+            if (intent.getAction().equals(Intent.ACTION_POWER_DISCONNECTED)) {
+                DroidCommon.DispositivoDesConectado = true;
+            }
+
+            context.startService(intentTTS);
+        } catch (Exception ex) {
+            Log.d("DroidBattery", "DroidInfoBattery - BroadcastReceiver - Erro: " + ex.getMessage());
+        }
+
         Log.d("DroidBattery", "DroidSetStatus - onReceive ");
     }
 }

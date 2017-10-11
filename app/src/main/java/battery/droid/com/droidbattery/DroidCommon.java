@@ -22,6 +22,8 @@ public class DroidCommon {
 
     public static boolean isCharging;
     public static String BatteryCurrent = "";
+    public static boolean DispositivoConectado;
+    public static boolean DispositivoDesConectado;
 
     public static String handleTime(Context context, String time) {
         String[] timeParts = time.split(":");

@@ -17,6 +17,7 @@ public class DroidTTS extends Service implements TextToSpeech.OnInitListener {
     private TextToSpeech tts;
     private Context context;
 
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -25,8 +26,16 @@ public class DroidTTS extends Service implements TextToSpeech.OnInitListener {
 
     @Override
     public void onInit(int i) {
-        if (DroidCommon.InformarBateriaCarregada(context)) {
-            VozBateriaCarregada();
+        if (DroidCommon.NaoPertube(context)) {
+            if (DroidCommon.DispositivoConectado) {
+                VozDispositivoConectado();
+            }
+            if (DroidCommon.DispositivoDesConectado) {
+                VozDispositivoDesConectado();
+            }
+            if (DroidCommon.InformarBateriaCarregada(context)) {
+                VozBateriaCarregada();
+            }
         }
     }
 
@@ -50,6 +59,20 @@ public class DroidTTS extends Service implements TextToSpeech.OnInitListener {
 
     public void VozBateriaCarregada() {
         tts.speak("Bateria carregada, você já pode desconectar do carregador.", TextToSpeech.QUEUE_FLUSH, null);
+        DroidCommon.TimeSleep(6000);
+        stopSelf();
+    }
+
+    public void VozDispositivoConectado() {
+        DroidCommon.DispositivoConectado = false;
+        tts.speak("Dispositivo conectado.", TextToSpeech.QUEUE_FLUSH, null);
+        DroidCommon.TimeSleep(6000);
+        stopSelf();
+    }
+
+    public void VozDispositivoDesConectado() {
+        DroidCommon.DispositivoDesConectado = false;
+        tts.speak("Dispositivo desconectado.", TextToSpeech.QUEUE_FLUSH, null);
         DroidCommon.TimeSleep(6000);
         stopSelf();
     }
