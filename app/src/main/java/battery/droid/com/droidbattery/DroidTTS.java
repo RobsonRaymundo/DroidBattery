@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.Nullable;
+import android.widget.Toast;
 
 import java.util.Locale;
 
@@ -36,7 +37,7 @@ public class DroidTTS extends Service implements TextToSpeech.OnInitListener {
             if (DroidCommon.InformarBateriaCarregada(context)) {
                 VozBateriaCarregada();
             }
-        }
+        } else Toast.makeText(context, "Não perturbe ativado", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -55,25 +56,33 @@ public class DroidTTS extends Service implements TextToSpeech.OnInitListener {
             tts.shutdown();
         }
         super.onDestroy();
+
     }
 
     public void VozBateriaCarregada() {
-        tts.speak("Bateria carregada, você já pode desconectar do carregador.", TextToSpeech.QUEUE_FLUSH, null);
-        DroidCommon.TimeSleep(6000);
-        stopSelf();
+        Fala("Bateria carregada, você já pode desconectar do carregador.");
     }
 
     public void VozDispositivoConectado() {
         DroidCommon.DispositivoConectado = false;
-        tts.speak("Dispositivo conectado.", TextToSpeech.QUEUE_FLUSH, null);
-        DroidCommon.TimeSleep(6000);
-        stopSelf();
+        Fala("Dispositivo conectado.");
     }
 
     public void VozDispositivoDesConectado() {
         DroidCommon.DispositivoDesConectado = false;
-        tts.speak("Dispositivo desconectado.", TextToSpeech.QUEUE_FLUSH, null);
-        DroidCommon.TimeSleep(6000);
+        Fala("Dispositivo desconectado.");
+    }
+
+    private void Fala(String texto) {
+        tts.speak(texto, TextToSpeech.QUEUE_FLUSH, null);
+        AguardandoFalar();
+        stopSelf();
+    }
+
+    private void AguardandoFalar() {
+        while (tts.isSpeaking()) {
+            DroidCommon.TimeSleep(500);
+        }
         stopSelf();
     }
 }

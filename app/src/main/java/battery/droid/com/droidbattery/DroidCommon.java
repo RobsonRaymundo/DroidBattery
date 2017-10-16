@@ -172,4 +172,6 @@ public class DroidCommon {
                 DroidCommon.isCharging &&
                 DroidCommon.BatteryCurrent.equals("100");
     }
+
+
 }
