@@ -14,6 +14,13 @@ import android.widget.Toast;
 public class DroidSetStatus extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
+        DroidCommon.DispositivoConectado = false;
+        DroidCommon.DispositivoDesConectado = false;
+        Intent intentTTS = new Intent(context, DroidTTS.class);
+        try {
+            context.stopService(intentTTS);
+        } catch (Exception ex) {
+        }
         DroidCommon.updateViewsSizeBattery(context);
         DroidService.loopingBattery = true;
         DroidWidget.onAppWidgetOptionsChanged = true;
@@ -33,11 +40,6 @@ public class DroidSetStatus extends BroadcastReceiver {
 
         if (DroidCommon.DispositivoConectado || DroidCommon.DispositivoDesConectado)
             try {
-                Intent intentTTS = new Intent(context, DroidTTS.class);
-                try {
-                    context.stopService(intentTTS);
-                } catch (Exception ex) {
-                }
                 context.startService(intentTTS);
             } catch (Exception ex) {
                 Log.d("DroidBattery", "DroidInfoBattery - BroadcastReceiver - Erro: " + ex.getMessage());
