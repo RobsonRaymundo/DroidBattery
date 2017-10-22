@@ -31,14 +31,12 @@ public class DroidSetStatus extends BroadcastReceiver {
 
         if (intent.getAction().equals(Intent.ACTION_POWER_CONNECTED)) {
             DroidCommon.DispositivoConectado = true;
-            Toast.makeText(context, "Dispositivo conectado", Toast.LENGTH_SHORT).show();
         }
         if (intent.getAction().equals(Intent.ACTION_POWER_DISCONNECTED)) {
             DroidCommon.DispositivoDesConectado = true;
-            Toast.makeText(context, "Dispositivo desconectado", Toast.LENGTH_SHORT).show();
         }
 
-        if (DroidCommon.DispositivoConectado || DroidCommon.DispositivoDesConectado)
+        if (DroidCommon.DispositivoConectado || DroidCommon.DispositivoDesConectado )
             try {
                 context.startService(intentTTS);
             } catch (Exception ex) {

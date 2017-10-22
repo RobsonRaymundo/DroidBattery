@@ -28,15 +28,19 @@ public class DroidTTS extends Service implements TextToSpeech.OnInitListener {
     @Override
     public void onInit(int i) {
         if (DroidCommon.NaoPertube(context)) {
-            if (DroidCommon.DispositivoConectado) {
-                VozDispositivoConectado();
-            }
-            if (DroidCommon.DispositivoDesConectado) {
-                VozDispositivoDesConectado();
-            }
+
             if (DroidCommon.InformarBateriaCarregada(context)) {
                 VozBateriaCarregada();
             }
+
+            if (DroidCommon.DispositivoConectado) {
+                VozDispositivoConectado();
+            }
+
+            if (DroidCommon.DispositivoDesConectado) {
+                VozDispositivoDesConectado();
+            }
+
         } else Toast.makeText(context, "Não perturbe ativado", Toast.LENGTH_SHORT).show();
     }
 
@@ -56,24 +60,24 @@ public class DroidTTS extends Service implements TextToSpeech.OnInitListener {
             tts.shutdown();
         }
         super.onDestroy();
-
     }
 
-    public void VozBateriaCarregada() {
+    private void VozBateriaCarregada() {
         Fala("Bateria carregada, você já pode desconectar do carregador.");
     }
 
-    public void VozDispositivoConectado() {
+    private void VozDispositivoConectado() {
         DroidCommon.DispositivoConectado = false;
         Fala("Dispositivo conectado.");
     }
 
-    public void VozDispositivoDesConectado() {
+    private void VozDispositivoDesConectado() {
         DroidCommon.DispositivoDesConectado = false;
         Fala("Dispositivo desconectado.");
     }
 
     private void Fala(String texto) {
+        Toast.makeText(context, texto, Toast.LENGTH_SHORT).show();
         tts.speak(texto, TextToSpeech.QUEUE_FLUSH, null);
         AguardandoFalar();
         stopSelf();
