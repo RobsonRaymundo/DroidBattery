@@ -67,12 +67,10 @@ public class DroidTTS extends Service implements TextToSpeech.OnInitListener {
     }
 
     private void VozDispositivoConectado() {
-        DroidCommon.DispositivoConectado = false;
         Fala("Dispositivo conectado.");
     }
 
     private void VozDispositivoDesConectado() {
-        DroidCommon.DispositivoDesConectado = false;
         Fala("Dispositivo desconectado.");
     }
 

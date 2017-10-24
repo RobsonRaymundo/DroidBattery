@@ -14,8 +14,6 @@ import android.widget.Toast;
 public class DroidSetStatus extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        DroidCommon.DispositivoConectado = false;
-        DroidCommon.DispositivoDesConectado = false;
         Intent intentTTS = new Intent(context, DroidTTS.class);
         try {
             context.stopService(intentTTS);
@@ -31,9 +29,13 @@ public class DroidSetStatus extends BroadcastReceiver {
 
         if (intent.getAction().equals(Intent.ACTION_POWER_CONNECTED)) {
             DroidCommon.DispositivoConectado = true;
+            DroidCommon.DispositivoDesConectado = false;
         }
         if (intent.getAction().equals(Intent.ACTION_POWER_DISCONNECTED)) {
-            DroidCommon.DispositivoDesConectado = true;
+            if (DroidCommon.DispositivoConectado) {
+                DroidCommon.DispositivoDesConectado = true;
+                DroidCommon.DispositivoConectado = false;
+            }
         }
 
         if (DroidCommon.DispositivoConectado || DroidCommon.DispositivoDesConectado )
