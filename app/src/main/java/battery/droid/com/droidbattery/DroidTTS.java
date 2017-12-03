@@ -31,14 +31,14 @@ public class DroidTTS extends Service implements TextToSpeech.OnInitListener {
 
             if (DroidCommon.InformarBateriaCarregada(context)) {
                 VozBateriaCarregada();
-            }
+            } else {
+                if (DroidCommon.DispositivoConectado) {
+                    VozDispositivoConectado();
+                }
 
-            if (DroidCommon.DispositivoConectado) {
-                VozDispositivoConectado();
-            }
-
-            if (DroidCommon.DispositivoDesConectado) {
-                VozDispositivoDesConectado();
+                if (DroidCommon.DispositivoDesConectado) {
+                    VozDispositivoDesConectado();
+                }
             }
 
         } else Toast.makeText(context, "Não perturbe ativado", Toast.LENGTH_SHORT).show();
