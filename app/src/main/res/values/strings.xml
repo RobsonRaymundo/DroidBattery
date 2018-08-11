@@ -1,13 +1,22 @@
 <resources>
     <string name="app_name">Level Battery</string>
-    <string name="txt_tela_Config">Tela de Configuração</string>
-    <string name="txt_titulo_bateria_carregada">Voz bateria carregada</string>
-    <string name="spf_fala_bateria_carregada">Ativar a síntese de Voz do Google para informar quando a bateria estiver totalmente carregada?</string>
+    <string name="tela_Config">Tela de Configuração</string>
+    <string name="titulo_ativar_voz_google">Ativar a Voz da Google</string>
+    <string name="spf_fala_bateria_carregada">Ativar a síntese de Voz da Google para informar quando a bateria estiver totalmente carregada, conectar e desconectar da energia?</string>
 
-    <string name="txt_titulo_boot_completado">Exibir um alerta</string>
+    <string name="titulo_bateria_carregada">Texto para bateria carregada</string>
+    <string name="txt_fala_bateria_carregada">Bateria carregada, você já pode desconectar do carregador</string>
+
+    <string name="titulo_dispositivo_conectado">Texto para dispositivo conectado</string>
+    <string name="txt_dispositivo_conectado">Dispositivo conectado</string>
+
+    <string name="titulo_dispositivo_desconectado">Texto para dispositivo desconectado</string>
+    <string name="txt_dispositivo_desconectado">Dispositivo desconectado</string>
+
+    <string name="titulo_boot_completado">Exibir um alerta</string>
     <string name="spf_boot_completado">Exibir um alerta com as informações de data e hora depois que o dispositivo for reiniciado?</string>
 
-    <string name="txt_titulo_fala_boot_completado">Voz reiniciar o dispositivo</string>
+    <string name="titulo_fala_boot_completado">Voz reiniciar o dispositivo</string>
     <string name="spf_fala_boot_completado">Ativar a síntese de Voz do Google para informar depois que o dispositivo for reiniciado?</string>
 
     <string name="quietSum">Não pertube entre as horas abaixo</string>
@@ -16,4 +25,5 @@
     <string name="stopTime">Hora final</string>
     <string name="set">OK</string>
     <string name="cancel">Cancelar</string>
+
 </resources>

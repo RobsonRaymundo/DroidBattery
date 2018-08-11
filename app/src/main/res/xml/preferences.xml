@@ -2,12 +2,34 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
         android:key="telaConfig"
-        android:title="@string/txt_tela_Config">
+        android:title="@string/tela_Config">
         <SwitchPreference
             android:defaultValue="true"
             android:key="spf_bateriaCarregada"
             android:summary="@string/spf_fala_bateria_carregada"
-            android:title="@string/txt_titulo_bateria_carregada"></SwitchPreference>
+            android:title="@string/titulo_ativar_voz_google"></SwitchPreference>
+
+        <EditTextPreference
+            android:defaultValue="@string/txt_fala_bateria_carregada"
+            android:dialogTitle="EditText Dialog"
+            android:key="falaBateriaCarregada"
+            android:summary="@string/txt_fala_bateria_carregada"
+            android:title="@string/titulo_bateria_carregada" />
+
+        <EditTextPreference
+            android:defaultValue="@string/txt_dispositivo_conectado"
+            android:dialogTitle="EditText Dialog"
+            android:key="dispositivoConectado"
+            android:summary="@string/txt_dispositivo_conectado"
+            android:title="@string/titulo_dispositivo_conectado" />
+
+        <EditTextPreference
+            android:defaultValue="@string/txt_dispositivo_desconectado"
+            android:dialogTitle="EditText Dialog"
+            android:key="dispositivoDesconectado"
+            android:summary="@string/txt_dispositivo_desconectado"
+            android:title="@string/titulo_dispositivo_desconectado" />
+
         <SwitchPreference
             android:defaultValue="false"
             android:dependency="spf_bateriaCarregada"
@@ -26,6 +48,7 @@
             android:key="stopTime"
             android:showDefault="true"
             android:title="@string/stopTime" />
+
 
     </PreferenceCategory>
 

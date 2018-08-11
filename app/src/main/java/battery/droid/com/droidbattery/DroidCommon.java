@@ -84,6 +84,41 @@ public class DroidCommon {
         return spf;
     }
 
+
+    public static String PreferenceDispositivoConectado(final Context context) {
+        String spf = "";
+        try {
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+            spf = sp.getString("dispositivoConectado", context.getString(R.string.txt_dispositivo_conectado)  );
+        } catch (Exception ex) {
+            Log.d("DroidInfoBattery", ex.getMessage());
+        }
+        return spf;
+    }
+
+    public static String PreferenceDispositivoDesconectado(final Context context) {
+        String spf = "";
+        try {
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+            spf = sp.getString("dispositivoDesconectado", context.getString(R.string.txt_dispositivo_desconectado)  );
+        } catch (Exception ex) {
+            Log.d("DroidInfoBattery", ex.getMessage());
+        }
+        return spf;
+    }
+
+    public static String PreferenceFalaBateriaCarregada(final Context context) {
+        String spf = "";
+        try {
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+            spf = sp.getString("falaBateriaCarregada", context.getString(R.string.spf_fala_bateria_carregada)  );
+        } catch (Exception ex) {
+            Log.d("DroidInfoBattery", ex.getMessage());
+        }
+        return spf;
+    }
+
+
     public static void updateViewsInfoBattery(Context context, String batteryLevel) {
         Log.d("DroidBattery", "DroidInfoBattery - updateViews()");
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);

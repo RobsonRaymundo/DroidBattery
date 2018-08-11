@@ -10,6 +10,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -18,6 +19,7 @@ import android.widget.Toast;
 
 public class DroidConfigurationActivity extends PreferenceActivity {
     private Context context;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +32,8 @@ public class DroidConfigurationActivity extends PreferenceActivity {
         startService(intent);
 
         //DroidServiceScreen.StopServiceScreen(context); // Teste para ver o restart do service screen
+
+
     }
 
     private void SetPreference() {
@@ -52,8 +56,10 @@ public class DroidConfigurationActivity extends PreferenceActivity {
         Preference stop = (Preference) findPreference("stopTime");
         stop.setSummary(DroidCommon.handleTime(context, mPrefs.getString("stopTime", "09:00")));
         stop.setOnPreferenceChangeListener(listener);
-    }
 
+
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

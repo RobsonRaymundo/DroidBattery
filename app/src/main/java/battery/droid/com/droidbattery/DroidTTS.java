@@ -63,15 +63,15 @@ public class DroidTTS extends Service implements TextToSpeech.OnInitListener {
     }
 
     private void VozBateriaCarregada() {
-        Fala("Bateria carregada, você já pode desconectar do carregador.");
+        Fala(DroidCommon.PreferenceFalaBateriaCarregada(context));
     }
 
     private void VozDispositivoConectado() {
-        Fala("Dispositivo conectado.");
+        Fala(DroidCommon.PreferenceDispositivoConectado(context));
     }
 
     private void VozDispositivoDesConectado() {
-        Fala("Dispositivo desconectado.");
+        Fala(DroidCommon.PreferenceDispositivoDesconectado(context));
     }
 
     private void Fala(String texto) {
