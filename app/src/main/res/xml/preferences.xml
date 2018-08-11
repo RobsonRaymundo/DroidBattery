@@ -11,21 +11,18 @@
 
         <EditTextPreference
             android:defaultValue="@string/txt_fala_bateria_carregada"
-            android:dialogTitle="EditText Dialog"
             android:key="falaBateriaCarregada"
             android:summary="@string/txt_fala_bateria_carregada"
             android:title="@string/titulo_bateria_carregada" />
 
         <EditTextPreference
             android:defaultValue="@string/txt_dispositivo_conectado"
-            android:dialogTitle="EditText Dialog"
             android:key="dispositivoConectado"
             android:summary="@string/txt_dispositivo_conectado"
             android:title="@string/titulo_dispositivo_conectado" />
 
         <EditTextPreference
             android:defaultValue="@string/txt_dispositivo_desconectado"
-            android:dialogTitle="EditText Dialog"
             android:key="dispositivoDesconectado"
             android:summary="@string/txt_dispositivo_desconectado"
             android:title="@string/titulo_dispositivo_desconectado" />
