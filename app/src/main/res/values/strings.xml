@@ -4,6 +4,9 @@
     <string name="titulo_ativar_voz_google">Ativar a Voz da Google</string>
     <string name="spf_fala_bateria_carregada">Ativar a síntese de Voz da Google para informar quando a bateria estiver totalmente carregada, conectar e desconectar da energia?</string>
 
+
+    <string name="titulo_pecentual_atingido">Informa quando atingir o percentual</string>
+
     <string name="titulo_bateria_carregada">Texto para bateria carregada</string>
     <string name="txt_fala_bateria_carregada">Bateria carregada, você já pode desconectar do carregador</string>
 
@@ -25,5 +28,34 @@
     <string name="stopTime">Hora final</string>
     <string name="set">OK</string>
     <string name="cancel">Cancelar</string>
+
+
+    <string-array name="arrayPercentualAtingido">
+        <item>50%</item>
+        <item>55%</item>
+        <item>60%</item>
+        <item>65%</item>
+        <item>70%</item>
+        <item>75%</item>
+        <item>80%</item>
+        <item>85%</item>
+        <item>90%</item>
+        <item>95%</item>
+        <item>100%</item>
+    </string-array>
+
+    <string-array name="arrayPercentualAtingidoValues">
+        <item>50</item>
+        <item>55</item>
+        <item>60</item>
+        <item>65</item>
+        <item>70</item>
+        <item>75</item>
+        <item>80</item>
+        <item>85</item>
+        <item>90</item>
+        <item>95</item>
+        <item>100</item>
+    </string-array>
 
 </resources>

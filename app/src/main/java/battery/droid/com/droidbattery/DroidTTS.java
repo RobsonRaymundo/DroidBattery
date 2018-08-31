@@ -28,8 +28,9 @@ public class DroidTTS extends Service implements TextToSpeech.OnInitListener {
     @Override
     public void onInit(int i) {
         if (DroidCommon.NaoPertube(context)) {
-
-            if (DroidCommon.InformarBateriaCarregada(context)) {
+            if (DroidCommon.InformarPercentualAtingido(context)) {
+                VozPercentualAgingido();
+            } else if (DroidCommon.InformarBateriaCarregada(context)) {
                 VozBateriaCarregada();
             } else {
                 if (DroidCommon.DispositivoConectado) {
@@ -64,6 +65,10 @@ public class DroidTTS extends Service implements TextToSpeech.OnInitListener {
 
     private void VozBateriaCarregada() {
         Fala(DroidCommon.PreferenceFalaBateriaCarregada(context));
+    }
+
+    private void VozPercentualAgingido() {
+        Fala(DroidCommon.PreferencePercentualAtingido(context) + " por cento") ;
     }
 
     private void VozDispositivoConectado() {

@@ -107,6 +107,24 @@ public class DroidCommon {
         return spf;
     }
 
+    private static String ObtemTextoPercentual(String valor)
+    {
+        return "";
+
+    }
+
+    public static String PreferencePercentualAtingido(final Context context) {
+        String spf = "";
+        try {
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+            spf = sp.getString("percentualAtingido", ""  );
+        } catch (Exception ex) {
+            Log.d("DroidInfoBattery", ex.getMessage());
+        }
+        return spf;
+    }
+
+
     public static String PreferenceFalaBateriaCarregada(final Context context) {
         String spf = "";
         try {
@@ -206,6 +224,14 @@ public class DroidCommon {
                 DroidCommon.NaoPertube(context) &&
                 DroidCommon.isCharging &&
                 DroidCommon.BatteryCurrent.equals("100");
+    }
+
+    public static boolean InformarPercentualAtingido(Context context)
+    {
+        return DroidCommon.PreferenceBateriaCarregada(context) &&
+                DroidCommon.NaoPertube(context) &&
+                DroidCommon.isCharging &&
+                DroidCommon.BatteryCurrent.equals(PreferencePercentualAtingido(context));
     }
 
 

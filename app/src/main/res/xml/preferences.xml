@@ -9,6 +9,14 @@
             android:summary="@string/spf_fala_bateria_carregada"
             android:title="@string/titulo_ativar_voz_google"></SwitchPreference>
 
+        <ListPreference
+            android:defaultValue="100"
+            android:entries="@array/arrayPercentualAtingido"
+            android:entryValues="@array/arrayPercentualAtingidoValues"
+            android:key="percentualAtingido"
+            android:summary="100"
+            android:title="@string/titulo_pecentual_atingido" />
+
         <EditTextPreference
             android:defaultValue="@string/txt_fala_bateria_carregada"
             android:key="falaBateriaCarregada"

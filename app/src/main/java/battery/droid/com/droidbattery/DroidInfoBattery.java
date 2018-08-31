@@ -31,7 +31,14 @@ public class DroidInfoBattery {
                 } else {
                     DroidCommon.updateViewsInfoBattery(context, battery);
                 }
-                if (DroidCommon.InformarBateriaCarregada(context)) {
+                if (DroidCommon.InformarPercentualAtingido(context)) {
+                    try {
+                        Intent intentTTS = new Intent(context, DroidTTS.class);
+                        context.startService(intentTTS);
+                    } catch (Exception ex) {
+                        Log.d("DroidBattery", "DroidInfoBattery - BroadcastReceiver - Erro: " + ex.getMessage());
+                    }
+                } else if (DroidCommon.InformarBateriaCarregada(context)) {
                     try {
                         Intent intentTTS = new Intent(context, DroidTTS.class);
                         context.startService(intentTTS);

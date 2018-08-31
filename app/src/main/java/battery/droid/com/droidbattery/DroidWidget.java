@@ -104,7 +104,8 @@ public class DroidWidget extends AppWidgetProvider {
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
         Log.d("DroidBattery", "DroidWidget - onReceive ");
-        if (ACTION_BATTERY_UPDATE.equals(intent.getAction()) || onAppWidgetOptionsChanged) {
+        // || onAppWidgetOptionsChanged
+        if (ACTION_BATTERY_UPDATE.equals(intent.getAction()) ) {
             onAppWidgetOptionsChanged = true;
             DroidService.loopingBattery = true;
             DroidService.StopStartService(context);
