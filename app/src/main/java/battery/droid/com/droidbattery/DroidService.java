@@ -28,44 +28,25 @@ public class DroidService extends Service {
     private Context context;
     public static Intent mServiceIntent;
 
-    public static void StopStartService(Context context) {
-        Intent intentService = new Intent(context, DroidService.class);
-        try {
-            context.stopService(intentService);
-            Log.d("DroidBattery", "DroidService - StopService ");
-
-        } catch (Exception ex) {
-            Log.d("DroidBattery", "DroidService - StopService - Erro " + ex.getMessage());
-        }
-        try {
-            context.startService(intentService);
-            Log.d("DroidBattery", "DroidService - StartService ");
-
-        } catch (Exception ex) {
-            Log.d("DroidBattery", "DroidService - StartService - Erro " + ex.getMessage());
-        }
-    }
-
-
     public static void StopService(Context context) {
         if (isMyServiceRunning(context)) {
             Intent intentService = new Intent(context, DroidService.class);
             try {
                 context.stopService(intentService);
             } catch (Exception ex) {
+                Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " Erro: " + ex.getMessage());
             }
-            Log.d("DroidBattery", "DroidService - StopService ");
         }
     }
 
     public static void StartService(Context context) {
         if (!isMyServiceRunning(context)) {
+            Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
             Intent intentService = new Intent(context, DroidService.class);
             try {
                 context.startService(intentService);
             } catch (Exception ex) {
             }
-            Log.d("DroidBattery", "DroidService - StartService ");
         }
     }
 
@@ -87,26 +68,25 @@ public class DroidService extends Service {
     @Override
     public void onStart(Intent intent, int startId) {
         super.onStart(intent, startId);
+        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
         mServiceIntent = intent;
         SetStatusBattery(registerReceiver(DroidInfoBattery.batteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED)));
-
-        Log.d("DroidBattery", "DroidService - onStart ");
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d("DroidBattery", "DroidService - onCreate ");
+        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
         try {
             context = getBaseContext();
         } catch (Exception ex) {
-            Log.d("DroidBattery", "DroidService - onCreate - Erro: " + ex.getMessage());
+            Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " Erro: " + ex.getMessage());
         }
     }
 
     @Override
     public void onDestroy() {
-        Log.d("DroidBattery", "DroidService - onDestroy ");
+        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
         //Toast.makeText(this, "DroidBattery - DroidService - onDestroy ", Toast.LENGTH_LONG).show();
         super.onDestroy();
     }
@@ -120,11 +100,11 @@ public class DroidService extends Service {
         ActivityManager manager = (ActivityManager) context.getSystemService(ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
             if (DroidService.class.getName().equals(service.service.getClassName())) {
-                Log.d("DroidBattery", "isMyServiceRunning - true ");
+                Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " true");
                 return true;
             }
         }
-        Log.d("DroidBattery", "isMyServiceRunning - false ");
+        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " false");
         return false;
     }
 

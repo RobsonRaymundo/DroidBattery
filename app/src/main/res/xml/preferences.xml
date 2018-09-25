@@ -5,17 +5,14 @@
         android:title="@string/tela_Config">
         <SwitchPreference
             android:defaultValue="true"
-            android:key="spf_bateriaCarregada"
-            android:summary="@string/spf_fala_bateria_carregada"
+            android:key="spf_ativarSinteseVoz"
+            android:summary="@string/spf_ativar_sintese_voz"
             android:title="@string/titulo_ativar_voz_google"></SwitchPreference>
 
-        <ListPreference
-            android:defaultValue="100"
-            android:entries="@array/arrayPercentualAtingido"
-            android:entryValues="@array/arrayPercentualAtingidoValues"
-            android:key="percentualAtingido"
-            android:summary="100"
+        <MultiSelectListPreference
+            android:key="multiSelectListPreference"
             android:title="@string/titulo_pecentual_atingido" />
+
 
         <EditTextPreference
             android:defaultValue="@string/txt_fala_bateria_carregada"
@@ -37,7 +34,7 @@
 
         <SwitchPreference
             android:defaultValue="false"
-            android:dependency="spf_bateriaCarregada"
+            android:dependency="spf_ativarSinteseVoz"
             android:key="quiet"
             android:summary="@string/quietSum"
             android:title="@string/quietHours" />

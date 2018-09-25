@@ -25,36 +25,38 @@ public class DroidServiceScreen extends Service {
     @Override
     public void onStart(Intent intent, int startId) {
         super.onStart(intent, startId);
-        IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
-        filter.addAction(Intent.ACTION_SCREEN_OFF);
-        BroadcastReceiver mReceiver = new DroidScreenOnOff();
-        registerReceiver(mReceiver, filter);
+        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
+        try {
+            IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+            filter.addAction(Intent.ACTION_SCREEN_OFF);
+            BroadcastReceiver mReceiver = new DroidScreenOnOff();
+            registerReceiver(mReceiver, filter);
+        } catch (Exception ex) {
+            Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " Erro: " + ex.getMessage());
+        }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        DroidCommon.updateViewsColorBattery(getBaseContext(), Color.GRAY);
-        Intent broadcastIntent = new Intent("battery.droid.com.droidbattery.ACTION_RESTART_SERVICE");
-        sendBroadcast(broadcastIntent);
-        Log.d("DroidBattery", "DroidServiceScreen - onDestroy");
+        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
+        try {
+            DroidCommon.updateViewsColorBattery(getBaseContext(), Color.GRAY);
+            Intent broadcastIntent = new Intent("battery.droid.com.droidbattery.ACTION_RESTART_SERVICE");
+            sendBroadcast(broadcastIntent);
+        } catch (Exception ex) {
+            Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " Erro: " + ex.getMessage());
+        }
+
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
+        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
+
         super.onStartCommand(intent, flags, startId);
         DroidCommon.TimeSleep(2000);
         return START_STICKY;
-    }
-
-    public static void StopServiceScreen(Context context) {
-
-        Intent intentService = new Intent(context, DroidServiceScreen.class);
-        try {
-            context.stopService(intentService);
-        } catch (Exception ex) {
-        }
-        Log.d("DroidBattery", "DroidService - StopService ");
-
     }
 }

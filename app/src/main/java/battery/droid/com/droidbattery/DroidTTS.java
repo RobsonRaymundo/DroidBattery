@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.Locale;
@@ -27,22 +28,41 @@ public class DroidTTS extends Service implements TextToSpeech.OnInitListener {
 
     @Override
     public void onInit(int i) {
-        if (DroidCommon.NaoPertube(context)) {
-            if (DroidCommon.InformarPercentualAtingido(context)) {
-                VozPercentualAgingido();
-            } else if (DroidCommon.InformarBateriaCarregada(context)) {
-                VozBateriaCarregada();
+        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
+        try {
+            boolean ativarSinteseVoz = DroidCommon.PreferenceAtivarSinteseVoz(context);
+            boolean naoPerturbe = DroidCommon.NaoPertube(context);
+            String msg = "";
+            if (ativarSinteseVoz && naoPerturbe) {
+                if (DroidCommon.InformarPercentualAtingidoMultiSelectPreference(context)) {
+                    VozPercentualAgingidoMultiSelectPreference();
+                } else if (DroidCommon.InformarBateriaCarregada(context)) {
+                    VozBateriaCarregada();
+                } else {
+                    if (DroidCommon.DispositivoConectado) {
+                        VozDispositivoConectado();
+                    }
+
+                    if (DroidCommon.DispositivoDesConectado) {
+                        VozDispositivoDesConectado();
+                    }
+                }
+
             } else {
-                if (DroidCommon.DispositivoConectado) {
-                    VozDispositivoConectado();
+
+                if (!ativarSinteseVoz) msg = "Sintese de Voz não ativado";
+                if (!naoPerturbe) {
+                    if (!msg.isEmpty()) {
+                        msg = msg + " e ";
+                    }
+                    msg = msg + "Não perturbe ativado";
                 }
 
-                if (DroidCommon.DispositivoDesConectado) {
-                    VozDispositivoDesConectado();
-                }
+                Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
             }
-
-        } else Toast.makeText(context, "Não perturbe ativado", Toast.LENGTH_SHORT).show();
+        } catch (Exception ex) {
+            Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " Erro: " + ex.getMessage());
+        }
     }
 
     @Override
@@ -67,8 +87,8 @@ public class DroidTTS extends Service implements TextToSpeech.OnInitListener {
         Fala(DroidCommon.PreferenceFalaBateriaCarregada(context));
     }
 
-    private void VozPercentualAgingido() {
-        Fala(DroidCommon.PreferencePercentualAtingido(context) + " por cento") ;
+    private void VozPercentualAgingidoMultiSelectPreference() {
+        Fala(DroidCommon.MultSelectPreferencePercentualAtingido(context) + " por cento");
     }
 
     private void VozDispositivoConectado() {
@@ -80,6 +100,7 @@ public class DroidTTS extends Service implements TextToSpeech.OnInitListener {
     }
 
     private void Fala(String texto) {
+        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
         Toast.makeText(context, texto, Toast.LENGTH_SHORT).show();
         tts.speak(texto, TextToSpeech.QUEUE_FLUSH, null);
         AguardandoFalar();

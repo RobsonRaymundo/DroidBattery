@@ -31,67 +31,74 @@ import java.util.concurrent.ExecutionException;
 public class DroidWidget extends AppWidgetProvider {
     public static boolean onAppWidgetOptionsChanged;
     private static final String ACTION_BATTERY_UPDATE = "battery.droid.com.droidbattery.UPDATE";
-    private int batteryLevel = 0;
 
     @Override
     public void onEnabled(Context context) {
         super.onEnabled(context);
+        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) );
         DroidService.StartService(context);
-        Log.d("DroidBattery", "DroidWidget - onEnabled ");
     }
 
     @Override
     public void onDisabled(Context context) {
         super.onDisabled(context);
-        Log.d("DroidBattery", "DroidWidget - onDesabled ");
+        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) );
     }
 
     @Override
     public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
+        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
+        try {
+            onAppWidgetOptionsChanged = true;
 
-        Log.d("DroidBattery", "DroidWidget - onAppWidgetOptionsChanged ");
-        onAppWidgetOptionsChanged = true;
+            RemoteViews updateViews =
+                    new RemoteViews(context.getPackageName(), R.layout.widget_layout);
+            String msg =
+                    String.format(Locale.getDefault(),
+                            "%d-%d",
+                            newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT),
+                            newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH));
 
-        RemoteViews updateViews =
-                new RemoteViews(context.getPackageName(), R.layout.widget_layout);
-        String msg =
-                String.format(Locale.getDefault(),
-                        "%d-%d",
-                        newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT),
-                        newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH));
+            //updateViews.setTextViewText(R.id.batteryText, msg);
 
-        //updateViews.setTextViewText(R.id.batteryText, msg);
+            DroidPreferences.SetInteger(context, "MIN_WIDTH", newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH));
 
-        DroidPreferences.SetInteger(context, "MIN_WIDTH", newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH));
+            if (newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH) > 110) {
+                updateViews.setTextViewTextSize(R.id.batteryText, TypedValue.COMPLEX_UNIT_DIP, 50);
+            } else {
+                updateViews.setTextViewTextSize(R.id.batteryText, TypedValue.COMPLEX_UNIT_DIP, 30);
+            }
 
-        if (newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH) > 110) {
-            updateViews.setTextViewTextSize(R.id.batteryText, TypedValue.COMPLEX_UNIT_DIP, 50);
-        } else {
-            updateViews.setTextViewTextSize(R.id.batteryText, TypedValue.COMPLEX_UNIT_DIP, 30);
+            appWidgetManager.updateAppWidget(appWidgetId, updateViews);
+        } catch (Exception ex) {
+            Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " Erro: " + ex.getMessage());
         }
-
-        appWidgetManager.updateAppWidget(appWidgetId, updateViews);
-
     }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
         super.onUpdate(context, appWidgetManager, appWidgetIds);
-        Log.d("DroidBattery", "DroidWidget - onUpdate ");
         ListenerOnClick(context, appWidgetManager);
     }
 
     private void ListenerOnClick(Context context, AppWidgetManager appWidgetManager) {
-        RemoteViews remoteViews;
-        ComponentName watchWidget;
+        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
+        try {
+            RemoteViews remoteViews;
+            ComponentName watchWidget;
 
-        remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
-        watchWidget = new ComponentName(context, DroidWidget.class);
+            remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
+            watchWidget = new ComponentName(context, DroidWidget.class);
 
-        remoteViews.setOnClickPendingIntent(R.id.batteryText, getPendingSelfIntent(context, ACTION_BATTERY_UPDATE));
-        appWidgetManager.updateAppWidget(watchWidget, remoteViews);
-        Log.d("DroidBattery", "DroidWidget - ListenerOnClick ");
+            remoteViews.setOnClickPendingIntent(R.id.batteryText, getPendingSelfIntent(context, ACTION_BATTERY_UPDATE));
+            appWidgetManager.updateAppWidget(watchWidget, remoteViews);
+
+        } catch (Exception ex) {
+            Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " Erro: " + ex.getMessage());
+        }
+
     }
 
     protected PendingIntent getPendingSelfIntent(Context context, String action) {
@@ -103,25 +110,19 @@ public class DroidWidget extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
-        Log.d("DroidBattery", "DroidWidget - onReceive ");
-        // || onAppWidgetOptionsChanged
-        if (ACTION_BATTERY_UPDATE.equals(intent.getAction()) ) {
-            onAppWidgetOptionsChanged = true;
-            DroidService.loopingBattery = true;
-            DroidService.StopStartService(context);
-            DroidCommon.Vibrar(context, 50);
+        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
+        try {
+
+            // || onAppWidgetOptionsChanged
+            if (ACTION_BATTERY_UPDATE.equals(intent.getAction())) {
+                onAppWidgetOptionsChanged = true;
+                DroidService.loopingBattery = true;
+                DroidService.StopService(context);
+                DroidService.StartService(context);
+                DroidCommon.Vibrar(context, 50);
+            }
+        } catch (Exception ex) {
+            Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " Erro: " + ex.getMessage());
         }
-    }
-
-    @Override
-    public void onRestored(Context context, int[] oldWidgetIds, int[] newWidgetIds) {
-        super.onRestored(context, oldWidgetIds, newWidgetIds);
-        Log.d("DroidBattery", "DroidWidget - onRestored ");
-    }
-
-    @Override
-    public void onDeleted(Context context, int[] appWidgetIds) {
-        super.onDeleted(context, appWidgetIds);
-        Log.d("DroidBattery", "DroidWidget - onRestored ");
     }
 }

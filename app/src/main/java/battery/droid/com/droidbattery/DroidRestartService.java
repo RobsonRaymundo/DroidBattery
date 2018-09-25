@@ -12,15 +12,17 @@ import android.util.Log;
 public class DroidRestartService extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Intent intentService = new Intent(context, DroidServiceScreen.class);
-        context.startService(intentService);
-        DroidCommon.TimeSleep(1000);
-        Log.d("DroidBattery", "DroidRestartService - onReceive ");
-
-        DroidWidget.onAppWidgetOptionsChanged = true;
-        DroidService.StopService(context);
-        DroidCommon.TimeSleep(1000);
-        DroidService.StartService(context);
-
+        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
+        try {
+            Intent intentService = new Intent(context, DroidServiceScreen.class);
+            context.startService(intentService);
+            DroidCommon.TimeSleep(1000);
+            DroidWidget.onAppWidgetOptionsChanged = true;
+            DroidService.StopService(context);
+            DroidCommon.TimeSleep(1000);
+            DroidService.StartService(context);
+        } catch (Exception ex) {
+            Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " Erro: " + ex.getMessage());
+        }
     }
 }

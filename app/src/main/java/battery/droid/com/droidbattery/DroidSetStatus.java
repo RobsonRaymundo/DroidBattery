@@ -14,37 +14,42 @@ import android.widget.Toast;
 public class DroidSetStatus extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
+        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
         Intent intentTTS = new Intent(context, DroidTTS.class);
         try {
             context.stopService(intentTTS);
         } catch (Exception ex) {
+            Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " Erro: " + ex.getMessage());
         }
-        DroidCommon.updateViewsSizeBattery(context);
-        DroidService.loopingBattery = true;
-        DroidWidget.onAppWidgetOptionsChanged = true;
-        DroidService.StopService(context);
-        DroidCommon.TimeSleep(1000);
-        DroidService.StartService(context);
-        DroidCommon.onUpdateDroidWidget(context);
+        try {
+            DroidCommon.updateViewsSizeBattery(context);
+            DroidService.loopingBattery = true;
+            DroidWidget.onAppWidgetOptionsChanged = true;
+            DroidService.StopService(context);
+            DroidCommon.TimeSleep(1000);
+            DroidService.StartService(context);
+            DroidCommon.onUpdateDroidWidget(context);
 
-        if (intent.getAction().equals(Intent.ACTION_POWER_CONNECTED)) {
-            DroidCommon.DispositivoConectado = true;
-            DroidCommon.DispositivoDesConectado = false;
-        }
-        if (intent.getAction().equals(Intent.ACTION_POWER_DISCONNECTED)) {
-            if (DroidCommon.DispositivoConectado) {
-                DroidCommon.DispositivoDesConectado = true;
-                DroidCommon.DispositivoConectado = false;
+            if (intent.getAction().equals(Intent.ACTION_POWER_CONNECTED)) {
+                DroidCommon.DispositivoConectado = true;
+                DroidCommon.DispositivoDesConectado = false;
             }
-        }
-
-        if (DroidCommon.DispositivoConectado || DroidCommon.DispositivoDesConectado )
-            try {
-                context.startService(intentTTS);
-            } catch (Exception ex) {
-                Log.d("DroidBattery", "DroidInfoBattery - BroadcastReceiver - Erro: " + ex.getMessage());
+            if (intent.getAction().equals(Intent.ACTION_POWER_DISCONNECTED)) {
+                if (DroidCommon.DispositivoConectado) {
+                    DroidCommon.DispositivoDesConectado = true;
+                    DroidCommon.DispositivoConectado = false;
+                }
             }
 
-        Log.d("DroidBattery", "DroidSetStatus - onReceive ");
+            if (DroidCommon.DispositivoConectado || DroidCommon.DispositivoDesConectado)
+                try {
+                    context.startService(intentTTS);
+                } catch (Exception ex) {
+                    Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " Erro: " + ex.getMessage());
+                }
+
+        } catch (Exception ex) {
+            Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " Erro: " + ex.getMessage());
+        }
     }
 }
