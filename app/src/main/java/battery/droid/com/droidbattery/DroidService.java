@@ -53,21 +53,32 @@ public class DroidService extends Service {
     }
 
     private void SetStatusBattery(Intent batteryStatus) {
-        int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
-        boolean charging = status == BatteryManager.BATTERY_STATUS_CHARGING;
-        boolean chargingFull = status == BatteryManager.BATTERY_STATUS_FULL;
-        boolean notcharging = status == BatteryManager.BATTERY_STATUS_NOT_CHARGING;
-        DroidCommon.isCharging = charging || chargingFull;
-        if (charging) {
-            DroidCommon.updateViewsColorBattery(context, Color.GREEN);
-        } else if (chargingFull) {
-            DroidCommon.updateViewsColorBattery(context, Color.BLUE);
-        } else if (notcharging) {
-            DroidCommon.updateViewsColorBattery(context, Color.YELLOW);
-        } else {
-            DroidCommon.updateViewsColorBattery(context, Color.WHITE);
+        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
+        try {
+            int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+            boolean charging = status == BatteryManager.BATTERY_STATUS_CHARGING;
+            boolean chargingFull = status == BatteryManager.BATTERY_STATUS_FULL;
+            boolean notcharging = status == BatteryManager.BATTERY_STATUS_NOT_CHARGING;
+            DroidCommon.isCharging = charging || chargingFull;
+            if (charging) {
+                DroidCommon.updateViewsColorBattery(context, Color.GREEN);
+            } else if (chargingFull) {
+                DroidCommon.updateViewsColorBattery(context, Color.BLUE);
+            } else if (notcharging) {
+                DroidCommon.updateViewsColorBattery(context, Color.YELLOW);
+            } else {
+                int level = batteryStatus.getIntExtra("level", 0);
+                String battery = String.valueOf(level);
+                Integer totalBattery = Integer.parseInt(battery);
+                if (totalBattery <= 20) {
+                    DroidCommon.updateViewsColorBattery(context, Color.RED);
+                } else {
+                    DroidCommon.updateViewsColorBattery(context, Color.WHITE);
+                }
+            }
+        } catch (Exception ex) {
+            Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " Erro: " + ex.getMessage());
         }
-        //Toast.makeText(context, String.valueOf(DroidCommon.isCharging), Toast.LENGTH_SHORT).show();
     }
 
     @Override

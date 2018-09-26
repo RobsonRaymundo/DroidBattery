@@ -26,10 +26,6 @@ public class DroidInfoBattery {
                     if (DroidService.loopingBattery) {
                         DroidService.loopingBattery = false;
                         Integer totalBattery = Integer.parseInt(battery);
-                        if (totalBattery <= 20)
-                        {
-                            DroidCommon.updateViewsColorBattery(context, Color.RED);
-                        }
                         for (Integer i = 0; i <= totalBattery; i++) {
                             DroidCommon.TimeSleep(1);
                             DroidCommon.updateViewsInfoBattery(context, i.toString());
