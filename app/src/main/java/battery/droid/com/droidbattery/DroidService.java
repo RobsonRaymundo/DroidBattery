@@ -28,11 +28,13 @@ public class DroidService extends Service {
     private Context context;
     public static Intent mServiceIntent;
 
+
     public static void StopService(Context context) {
         if (isMyServiceRunning(context)) {
             Intent intentService = new Intent(context, DroidService.class);
             try {
                 context.stopService(intentService);
+                DroidCommon.TimeSleep(500);
             } catch (Exception ex) {
                 Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " Erro: " + ex.getMessage());
             }
@@ -54,11 +56,14 @@ public class DroidService extends Service {
         int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
         boolean charging = status == BatteryManager.BATTERY_STATUS_CHARGING;
         boolean chargingFull = status == BatteryManager.BATTERY_STATUS_FULL;
+        boolean notcharging = status == BatteryManager.BATTERY_STATUS_NOT_CHARGING;
         DroidCommon.isCharging = charging || chargingFull;
         if (charging) {
             DroidCommon.updateViewsColorBattery(context, Color.GREEN);
         } else if (chargingFull) {
             DroidCommon.updateViewsColorBattery(context, Color.BLUE);
+        } else if (notcharging) {
+            DroidCommon.updateViewsColorBattery(context, Color.YELLOW);
         } else {
             DroidCommon.updateViewsColorBattery(context, Color.WHITE);
         }

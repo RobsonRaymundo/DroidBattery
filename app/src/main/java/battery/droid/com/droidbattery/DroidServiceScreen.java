@@ -1,5 +1,6 @@
 package battery.droid.com.droidbattery;
 
+import android.app.ActivityManager;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -58,5 +59,41 @@ public class DroidServiceScreen extends Service {
         super.onStartCommand(intent, flags, startId);
         DroidCommon.TimeSleep(2000);
         return START_STICKY;
+    }
+
+    public static void StopService(Context context) {
+        if (isMyServiceRunning(context)) {
+            Intent intentService = new Intent(context, DroidServiceScreen.class);
+            try {
+                context.stopService(intentService);
+                DroidCommon.TimeSleep(1000);
+            } catch (Exception ex) {
+                Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " Erro: " + ex.getMessage());
+            }
+        }
+    }
+
+
+    public static void StartService(Context context) {
+        if (!isMyServiceRunning(context)) {
+            Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
+            Intent intentService = new Intent(context, DroidServiceScreen.class);
+            try {
+                context.startService(intentService);
+            } catch (Exception ex) {
+            }
+        }
+    }
+
+    private static boolean isMyServiceRunning(Context context) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (DroidServiceScreen.class.getName().equals(service.service.getClassName())) {
+                Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " true");
+                return true;
+            }
+        }
+        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " false");
+        return false;
     }
 }

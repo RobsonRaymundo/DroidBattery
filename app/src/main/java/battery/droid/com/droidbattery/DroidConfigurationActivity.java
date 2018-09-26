@@ -44,13 +44,11 @@ public class DroidConfigurationActivity extends PreferenceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         context = getBaseContext();
-
+        //DroidServiceScreen.StopService(context);
         Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
         super.onCreate(savedInstanceState);
         SetPreference();
-        //  DroidService.StopStartService(context);
-        Intent intent = new Intent(context, DroidServiceScreen.class);
-        startService(intent);
+        DroidServiceScreen.StartService(context);
     }
 
 

@@ -18,8 +18,8 @@ public class DroidRestartService extends BroadcastReceiver {
             context.startService(intentService);
             DroidCommon.TimeSleep(1000);
             DroidWidget.onAppWidgetOptionsChanged = true;
-            DroidService.StopService(context);
-            DroidCommon.TimeSleep(1000);
+            //DroidService.StopService(context);
+            //DroidCommon.TimeSleep(1000);
             DroidService.StartService(context);
         } catch (Exception ex) {
             Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " Erro: " + ex.getMessage());

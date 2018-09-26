@@ -26,7 +26,6 @@ public class DroidSetStatus extends BroadcastReceiver {
             DroidService.loopingBattery = true;
             DroidWidget.onAppWidgetOptionsChanged = true;
             DroidService.StopService(context);
-            DroidCommon.TimeSleep(1000);
             DroidService.StartService(context);
             DroidCommon.onUpdateDroidWidget(context);
 

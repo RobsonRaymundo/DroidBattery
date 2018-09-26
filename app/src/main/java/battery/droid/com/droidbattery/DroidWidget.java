@@ -113,10 +113,11 @@ public class DroidWidget extends AppWidgetProvider {
         Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
         try {
 
-            // || onAppWidgetOptionsChanged
-            if (ACTION_BATTERY_UPDATE.equals(intent.getAction())) {
+
+            if (onAppWidgetOptionsChanged || ACTION_BATTERY_UPDATE.equals(intent.getAction())) {
                 onAppWidgetOptionsChanged = true;
                 DroidService.loopingBattery = true;
+                DroidCommon.updateViewsInfoBattery(context, "0");
                 DroidService.StopService(context);
                 DroidService.StartService(context);
                 DroidCommon.Vibrar(context, 50);

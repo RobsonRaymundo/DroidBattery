@@ -170,7 +170,7 @@ public class DroidCommon {
         Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
         try {
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
-            views.setTextViewText(R.id.batteryText, batteryLevel);
+            views.setTextViewText(R.id.batteryText, batteryLevel + "%");
 
             ComponentName componentName = new ComponentName(context, DroidWidget.class);
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
@@ -182,6 +182,7 @@ public class DroidCommon {
 
     public static void TimeSleep(Integer seg) {
         try {
+            Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
             Thread.sleep(seg);
         } catch (Exception ex) {
         }
