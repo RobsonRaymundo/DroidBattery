@@ -99,7 +99,7 @@ public class DroidCommon {
 
     public static boolean PreferenceAtivarSinteseVoz(final Context context) {
         Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
-        boolean spf = false;
+        boolean spf = true;
         try {
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
             spf = sp.getBoolean("spf_ativarSinteseVoz", true);
