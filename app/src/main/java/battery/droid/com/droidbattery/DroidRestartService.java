@@ -14,12 +14,9 @@ public class DroidRestartService extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
         try {
-            Intent intentService = new Intent(context, DroidServiceScreen.class);
-            context.startService(intentService);
+            DroidServiceScreen.StartService(context);
             DroidCommon.TimeSleep(1000);
             DroidWidget.onAppWidgetOptionsChanged = true;
-            //DroidService.StopService(context);
-            //DroidCommon.TimeSleep(1000);
             DroidService.StartService(context);
         } catch (Exception ex) {
             Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " Erro: " + ex.getMessage());

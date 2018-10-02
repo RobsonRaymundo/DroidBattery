@@ -1,11 +1,8 @@
 package battery.droid.com.droidbattery;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.TypedArray;
 import android.os.Bundle;
-import android.preference.ListPreference;
 import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -13,17 +10,12 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.prefs.Preferences;
 
 /**
  * Created by Robson on 02/05/2017.
@@ -37,9 +29,6 @@ public class DroidConfigurationActivity extends PreferenceActivity {
     private Preference dispositivoConectado;
     private Preference dispositivoDesconectado;
     private MultiSelectListPreference multiSelectListPreference = null;
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,16 +81,10 @@ public class DroidConfigurationActivity extends PreferenceActivity {
                         preference.setSummary(DroidCommon.MultiSelectPreference.toString() + " por cento");
                     }
                     return true;
-
-
                 }
 
 
-
             };
-
-
-
 
             SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
             start = (Preference) findPreference("startTime");
@@ -130,17 +113,11 @@ public class DroidConfigurationActivity extends PreferenceActivity {
             multiSelectListPreference.setDefaultValue(R.array.arrayPercentualAtingidoDefaultValues);
             multiSelectListPreference.setOnPreferenceChangeListener(multiSelectListListener);
             multiSelectListListener.onPreferenceChange(multiSelectListPreference, multiSelectListPreference.getValues());
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " Erro: " + ex.getMessage());
 
         }
-
-
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -149,9 +126,6 @@ public class DroidConfigurationActivity extends PreferenceActivity {
 
         } catch (Exception ex) {
         }
-
         return true;
     }
-
-
 }

@@ -1,5 +1,6 @@
 package battery.droid.com.droidbattery;
 
+import android.app.ActivityManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -34,22 +35,18 @@ public class DroidTTS extends Service implements TextToSpeech.OnInitListener {
             boolean naoPerturbe = DroidCommon.NaoPertube(context);
             String msg = "";
             if (ativarSinteseVoz && naoPerturbe) {
-                if (DroidCommon.InformarPercentualAtingidoMultiSelectPreference(context)) {
-                    VozPercentualAgingidoMultiSelectPreference();
-                } else if (DroidCommon.InformarBateriaCarregada(context)) {
+                if (DroidCommon.InformarBateriaCarregada(context)) {
                     VozBateriaCarregada();
+                } else if (DroidCommon.InformarPercentualAtingidoMultiSelectPreference(context)) {
+                    VozPercentualAgingidoMultiSelectPreference();
                 } else {
                     if (DroidCommon.DispositivoConectado) {
                         VozDispositivoConectado();
-                    }
-
-                    if (DroidCommon.DispositivoDesConectado) {
+                    } else {
                         VozDispositivoDesConectado();
                     }
                 }
-
             } else {
-
                 if (!ativarSinteseVoz) msg = "Sintese de Voz não ativado";
                 if (!naoPerturbe) {
                     if (!msg.isEmpty()) {
@@ -57,7 +54,6 @@ public class DroidTTS extends Service implements TextToSpeech.OnInitListener {
                     }
                     msg = msg + "Não perturbe ativado";
                 }
-
                 Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
             }
         } catch (Exception ex) {
@@ -93,10 +89,12 @@ public class DroidTTS extends Service implements TextToSpeech.OnInitListener {
 
     private void VozDispositivoConectado() {
         Fala(DroidCommon.PreferenceDispositivoConectado(context));
+        //DroidCommon.DispositivoConectado = false;
     }
 
     private void VozDispositivoDesConectado() {
         Fala(DroidCommon.PreferenceDispositivoDesconectado(context));
+        //DroidCommon.DispositivoDesConectado = false;
     }
 
     private void Fala(String texto) {
@@ -112,5 +110,40 @@ public class DroidTTS extends Service implements TextToSpeech.OnInitListener {
             DroidCommon.TimeSleep(500);
         }
         stopSelf();
+    }
+
+    public static void StopService(Context context) {
+        if (isMyServiceRunning(context)) {
+            Intent intentService = new Intent(context, DroidTTS.class);
+            try {
+                context.stopService(intentService);
+                DroidCommon.TimeSleep(500);
+            } catch (Exception ex) {
+                Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " Erro: " + ex.getMessage());
+            }
+        }
+    }
+
+    public static void StartService(Context context) {
+        if (!isMyServiceRunning(context)) {
+            Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
+            Intent intentService = new Intent(context, DroidTTS.class);
+            try {
+                context.startService(intentService);
+            } catch (Exception ex) {
+            }
+        }
+    }
+
+    private static boolean isMyServiceRunning(Context context) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (DroidTTS.class.getName().equals(service.service.getClassName())) {
+                Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " true");
+                return true;
+            }
+        }
+        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " false");
+        return false;
     }
 }

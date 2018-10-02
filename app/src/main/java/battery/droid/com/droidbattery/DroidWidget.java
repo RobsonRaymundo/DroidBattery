@@ -1,28 +1,17 @@
 package battery.droid.com.droidbattery;
 
-import android.annotation.TargetApi;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
-import android.appwidget.AppWidgetProviderInfo;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.graphics.Color;
-import android.os.BatteryManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Vibrator;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.View;
 import android.widget.RemoteViews;
 
 import java.util.Locale;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Robson on 02/05/2017.
@@ -35,14 +24,14 @@ public class DroidWidget extends AppWidgetProvider {
     @Override
     public void onEnabled(Context context) {
         super.onEnabled(context);
-        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) );
+        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
         DroidService.StartService(context);
     }
 
     @Override
     public void onDisabled(Context context) {
         super.onDisabled(context);
-        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) );
+        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
     }
 
     @Override

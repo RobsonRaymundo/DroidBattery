@@ -4,18 +4,16 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.BatteryManager;
 import android.os.Vibrator;
-import android.preference.MultiSelectListPreference;
 import android.preference.PreferenceManager;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.util.TypedValue;
 import android.widget.RemoteViews;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Robson on 04/08/2017.
@@ -26,9 +24,12 @@ public class DroidCommon {
     public static String TAG = "DroidInfoBattery";
     public static boolean isCharging;
     public static String BatteryCurrent = "";
+    public static int BatteryStatus;
     public static boolean DispositivoConectado;
-    public static boolean DispositivoDesConectado;
+    public static boolean InformarBateriaCarregada;
+    public static boolean InformarPercentualAtingidoMultiSelectPreference;
     public static List<String> MultiSelectPreference;
+    public static boolean BatteryFull = false;
 
 
     public static String getLogTagWithMethod(Throwable stack) {
@@ -259,11 +260,11 @@ public class DroidCommon {
     }
 
     public static boolean InformarBateriaCarregada(Context context) {
-        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
+        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " " + DroidCommon.BatteryStatus);
         return DroidCommon.PreferenceAtivarSinteseVoz(context) &&
                 DroidCommon.NaoPertube(context) &&
                 DroidCommon.isCharging &&
-                DroidCommon.BatteryCurrent.equals("100");
+                DroidCommon.BatteryStatus == BatteryManager.BATTERY_STATUS_FULL;
     }
 
     public static boolean InformarPercentualAtingidoMultiSelectPreference(Context context) {

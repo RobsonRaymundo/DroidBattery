@@ -5,13 +5,9 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
-import android.os.BatteryManager;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
-
-import java.util.Locale;
 
 /**
  * Created by Robson on 02/05/2017.
@@ -26,8 +22,6 @@ public class DroidService extends Service {
 
     public static boolean loopingBattery;
     private Context context;
-    public static Intent mServiceIntent;
-
 
     public static void StopService(Context context) {
         if (isMyServiceRunning(context)) {
@@ -52,41 +46,10 @@ public class DroidService extends Service {
         }
     }
 
-    private void SetStatusBattery(Intent batteryStatus) {
-        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
-        try {
-            int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
-            boolean charging = status == BatteryManager.BATTERY_STATUS_CHARGING;
-            boolean chargingFull = status == BatteryManager.BATTERY_STATUS_FULL;
-            boolean notcharging = status == BatteryManager.BATTERY_STATUS_NOT_CHARGING;
-            DroidCommon.isCharging = charging || chargingFull;
-            if (charging) {
-                DroidCommon.updateViewsColorBattery(context, Color.GREEN);
-            } else if (chargingFull) {
-                DroidCommon.updateViewsColorBattery(context, Color.BLUE);
-            } else if (notcharging) {
-                DroidCommon.updateViewsColorBattery(context, Color.YELLOW);
-            } else {
-                int level = batteryStatus.getIntExtra("level", 0);
-                String battery = String.valueOf(level);
-                Integer totalBattery = Integer.parseInt(battery);
-                if (totalBattery <= 20) {
-                    DroidCommon.updateViewsColorBattery(context, Color.RED);
-                } else {
-                    DroidCommon.updateViewsColorBattery(context, Color.WHITE);
-                }
-            }
-        } catch (Exception ex) {
-            Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " Erro: " + ex.getMessage());
-        }
-    }
-
     @Override
     public void onStart(Intent intent, int startId) {
         super.onStart(intent, startId);
         Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
-        mServiceIntent = intent;
-        SetStatusBattery(registerReceiver(DroidInfoBattery.batteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED)));
     }
 
     @Override
@@ -95,6 +58,7 @@ public class DroidService extends Service {
         Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
         try {
             context = getBaseContext();
+            registerReceiver(DroidInfoBattery.batteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         } catch (Exception ex) {
             Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " Erro: " + ex.getMessage());
         }
@@ -104,6 +68,9 @@ public class DroidService extends Service {
     public void onDestroy() {
         Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
         //Toast.makeText(this, "DroidBattery - DroidService - onDestroy ", Toast.LENGTH_LONG).show();
+        if (DroidInfoBattery.batteryReceiver != null) {
+            unregisterReceiver(DroidInfoBattery.batteryReceiver);
+        }
         super.onDestroy();
     }
 
