@@ -33,16 +33,16 @@ public class DroidConfigurationActivity extends PreferenceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         context = getBaseContext();
-        //DroidServiceScreen.StopService(context);
-        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
         super.onCreate(savedInstanceState);
+        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
         SetPreference();
-        DroidServiceScreen.StartService(context);
+        DroidMainService.StartService(context);
     }
 
 
     private void SetPreference() {
         try {
+            Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
             addPreferencesFromResource(R.xml.preferences);
             Toast.makeText(this, "Widget Droid Battery está pronto para ser adicionado!",
                     Toast.LENGTH_LONG).show();

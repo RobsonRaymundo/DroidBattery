@@ -11,6 +11,7 @@ import android.text.format.DateFormat;
 import android.util.Log;
 import android.util.TypedValue;
 import android.widget.RemoteViews;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -21,20 +22,32 @@ import java.util.List;
 
 public class DroidCommon {
 
-    public static String TAG = "DroidInfoBattery";
-    public static boolean isCharging;
+    public static String TAG = "DroidBattery";
     public static String BatteryCurrent = "";
     public static int BatteryStatus;
+    public static boolean InformaDispositivoConectado;
     public static boolean DispositivoConectado;
-    public static boolean InformarBateriaCarregada;
-    public static boolean InformarPercentualAtingidoMultiSelectPreference;
+    public static boolean DispositivoDesConectado;
     public static List<String> MultiSelectPreference;
     public static boolean BatteryFull = false;
-
 
     public static String getLogTagWithMethod(Throwable stack) {
         StackTraceElement[] trace = stack.getStackTrace();
         return trace[0].getClassName() + "." + trace[0].getMethodName() + ":" + trace[0].getLineNumber();
+    }
+
+    public static final String PREF_ID = "DroidPreferenceBattery";
+
+    public static void SetInteger(Context context, String chave, int valor) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_ID, 0);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(chave, valor);
+        editor.commit();
+    }
+
+    public static int GetInteger(Context context, String chave) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_ID, 0);
+        return sharedPreferences.getInt(chave, 0);
     }
 
     public static String handleTime(Context context, String time) {
@@ -81,7 +94,7 @@ public class DroidCommon {
         try {
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
 
-            Integer min_width = DroidPreferences.GetInteger(context, "MIN_WIDTH");
+            Integer min_width = DroidCommon.GetInteger(context, "MIN_WIDTH");
 
             if (min_width > 110) {
                 views.setTextViewTextSize(R.id.batteryText, TypedValue.COMPLEX_UNIT_DIP, 50);
@@ -109,7 +122,6 @@ public class DroidCommon {
         }
         return spf;
     }
-
 
     public static String PreferenceDispositivoConectado(final Context context) {
         Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
@@ -206,7 +218,7 @@ public class DroidCommon {
         try {
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
             views.setTextColor(R.id.batteryText, color);
-            Integer min_width = DroidPreferences.GetInteger(context, "MIN_WIDTH");
+            Integer min_width = DroidCommon.GetInteger(context, "MIN_WIDTH");
             if (min_width > 110) {
                 views.setTextViewTextSize(R.id.batteryText, TypedValue.COMPLEX_UNIT_DIP, 50);
             } else {
@@ -263,7 +275,7 @@ public class DroidCommon {
         Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " " + DroidCommon.BatteryStatus);
         return DroidCommon.PreferenceAtivarSinteseVoz(context) &&
                 DroidCommon.NaoPertube(context) &&
-                DroidCommon.isCharging &&
+                DroidCommon.DispositivoConectado &&
                 DroidCommon.BatteryStatus == BatteryManager.BATTERY_STATUS_FULL;
     }
 
@@ -271,7 +283,7 @@ public class DroidCommon {
         Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
         return DroidCommon.PreferenceAtivarSinteseVoz(context) &&
                 DroidCommon.NaoPertube(context) &&
-                DroidCommon.isCharging &&
+                DroidCommon.DispositivoConectado &&
                 PercentualAtingidoMultiSelectPreference(context);
     }
 

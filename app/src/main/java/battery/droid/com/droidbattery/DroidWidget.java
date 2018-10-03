@@ -18,14 +18,12 @@ import java.util.Locale;
  */
 
 public class DroidWidget extends AppWidgetProvider {
-    public static boolean onAppWidgetOptionsChanged;
     private static final String ACTION_BATTERY_UPDATE = "battery.droid.com.droidbattery.UPDATE";
 
     @Override
     public void onEnabled(Context context) {
         super.onEnabled(context);
         Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
-        DroidService.StartService(context);
     }
 
     @Override
@@ -39,8 +37,6 @@ public class DroidWidget extends AppWidgetProvider {
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
         Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
         try {
-            onAppWidgetOptionsChanged = true;
-
             RemoteViews updateViews =
                     new RemoteViews(context.getPackageName(), R.layout.widget_layout);
             String msg =
@@ -51,7 +47,7 @@ public class DroidWidget extends AppWidgetProvider {
 
             //updateViews.setTextViewText(R.id.batteryText, msg);
 
-            DroidPreferences.SetInteger(context, "MIN_WIDTH", newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH));
+            DroidCommon.SetInteger(context, "MIN_WIDTH", newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH));
 
             if (newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH) > 110) {
                 updateViews.setTextViewTextSize(R.id.batteryText, TypedValue.COMPLEX_UNIT_DIP, 50);
@@ -101,15 +97,12 @@ public class DroidWidget extends AppWidgetProvider {
         super.onReceive(context, intent);
         Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
         try {
-
-
-            if (onAppWidgetOptionsChanged || ACTION_BATTERY_UPDATE.equals(intent.getAction())) {
-                onAppWidgetOptionsChanged = true;
-                DroidService.loopingBattery = true;
-                DroidCommon.updateViewsInfoBattery(context, "0");
-                DroidService.StopService(context);
-                DroidService.StartService(context);
+            if (ACTION_BATTERY_UPDATE.equals(intent.getAction())) {
                 DroidCommon.Vibrar(context, 50);
+                DroidMainService.loopingBattery = true;
+                DroidCommon.updateViewsInfoBattery(context, "0");
+                DroidMainService.AtualizaBateria(context);
+                DroidMainService.ChamaSinteseVoz(context);
             }
         } catch (Exception ex) {
             Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " Erro: " + ex.getMessage());
