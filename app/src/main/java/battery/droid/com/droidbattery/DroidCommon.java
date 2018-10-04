@@ -3,6 +3,8 @@ package battery.droid.com.droidbattery;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.BatteryManager;
 import android.os.Vibrator;
@@ -14,7 +16,9 @@ import android.widget.RemoteViews;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Robson on 04/08/2017.
@@ -24,12 +28,21 @@ public class DroidCommon {
 
     public static String TAG = "DroidBattery";
     public static String BatteryCurrent = "";
-    public static int BatteryStatus;
-    public static boolean InformaDispositivoConectado;
-    public static boolean DispositivoConectado;
-    public static boolean DispositivoDesConectado;
-    public static List<String> MultiSelectPreference;
-    public static boolean BatteryFull = false;
+    public static boolean InformaDispositivoConectadoDesconectado;
+    public static boolean BateriaCarregada;
+
+    public static int ObtemStatusBateria(Context context) {
+        int retorno = -1;
+        try {
+            IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+            Intent batteryStatus = context.registerReceiver(null, ifilter);
+            retorno = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+            Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " " + retorno);
+        } catch (Exception ex) {
+            Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " Erro: " + ex.getMessage());
+        }
+        return retorno;
+    }
 
     public static String getLogTagWithMethod(Throwable stack) {
         StackTraceElement[] trace = stack.getStackTrace();
@@ -38,16 +51,79 @@ public class DroidCommon {
 
     public static final String PREF_ID = "DroidPreferenceBattery";
 
+
+    public static void SetList(Context context, String chave, List<String> valores) {
+        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
+        try {
+            SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_ID, 0);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            Set<String> set = new HashSet<String>(valores);
+            //set.addAll(valores);
+            editor.putStringSet(chave, set);
+            editor.commit();
+        } catch (Exception ex) {
+            Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " Erro: " + ex.getMessage());
+        }
+    }
+
+    public static Set<String> GetList(Context context, String chave) {
+        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
+        Set<String> set = new HashSet<String>();
+        try {
+            SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_ID, 0);
+            set.addAll(sharedPreferences.getStringSet(chave, null));
+        } catch (Exception ex) {
+            Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " Erro: " + ex.getMessage());
+        }
+        return set;
+    }
+
+
     public static void SetInteger(Context context, String chave, int valor) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_ID, 0);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(chave, valor);
-        editor.commit();
+        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
+        try {
+            SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_ID, 0);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt(chave, valor);
+            editor.commit();
+        } catch (Exception ex) {
+            Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " Erro: " + ex.getMessage());
+        }
     }
 
     public static int GetInteger(Context context, String chave) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_ID, 0);
-        return sharedPreferences.getInt(chave, 0);
+        int retorno = 0;
+        try {
+            SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_ID, 0);
+            retorno = sharedPreferences.getInt(chave, 0);
+            Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " " + retorno);
+        } catch (Exception ex) {
+            Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " Erro: " + ex.getMessage());
+        }
+        return retorno;
+    }
+
+    public static void SetBoolean(Context context, String chave, boolean valor) {
+        try {
+            SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_ID, 0);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean(chave, valor);
+            editor.commit();
+        } catch (Exception ex) {
+            Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " Erro: " + ex.getMessage());
+        }
+    }
+
+    public static boolean GetBoolean(Context context, String chave) {
+        boolean retorno = false;
+        try {
+            SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_ID, 0);
+            retorno = sharedPreferences.getBoolean(chave, false);
+            Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " " + retorno);
+        } catch (Exception ex) {
+            Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " Erro: " + ex.getMessage());
+        }
+        return retorno;
     }
 
     public static String handleTime(Context context, String time) {
@@ -148,23 +224,25 @@ public class DroidCommon {
     }
 
     public static String MultSelectPreferencePercentualAtingido(final Context context) {
-        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
         String spf = "";
         try {
-
-            for (String retval : DroidCommon.MultiSelectPreference) {
-                if (DroidCommon.BatteryCurrent.equals(retval)) {
-                    spf = retval.toString();
-                    break;
+            int total = -1;
+            Set<String> multiSelectPreference = DroidCommon.GetList(context, "multiSelectPreference");
+            if (multiSelectPreference != null) {
+                total = multiSelectPreference.size();
+                for (String retval : multiSelectPreference) {
+                    if (DroidCommon.BatteryCurrent.equals(retval)) {
+                        spf = retval.toString();
+                        break;
+                    }
                 }
             }
-
+            Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " " + total);
         } catch (Exception ex) {
             Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " Erro: " + ex.getMessage());
         }
         return spf;
     }
-
 
     public static String PreferenceFalaBateriaCarregada(final Context context) {
         Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
@@ -272,37 +350,48 @@ public class DroidCommon {
     }
 
     public static boolean InformarBateriaCarregada(Context context) {
-        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " " + DroidCommon.BatteryStatus);
-        return DroidCommon.PreferenceAtivarSinteseVoz(context) &&
-                DroidCommon.NaoPertube(context) &&
-                DroidCommon.DispositivoConectado &&
-                DroidCommon.BatteryStatus == BatteryManager.BATTERY_STATUS_FULL;
+        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
+        return DroidCommon.ObtemStatusBateria(context) == BatteryManager.BATTERY_STATUS_FULL;
     }
 
     public static boolean InformarPercentualAtingidoMultiSelectPreference(Context context) {
-        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
-        return DroidCommon.PreferenceAtivarSinteseVoz(context) &&
-                DroidCommon.NaoPertube(context) &&
-                DroidCommon.DispositivoConectado &&
-                PercentualAtingidoMultiSelectPreference(context);
-    }
-
-
-    public static boolean PercentualAtingidoMultiSelectPreference(Context context) {
-        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
         boolean retorno = false;
-        try
-        {
-        if (MultiSelectPreference != null) {
-            for (String retval : DroidCommon.MultiSelectPreference) {
-                retorno = DroidCommon.BatteryCurrent.equals(retval);
-                if (retorno) break;
+        int total = -1;
+        try {
+            Set<String> multiSelectPreference = DroidCommon.GetList(context, "multiSelectPreference");
+            if (multiSelectPreference != null) {
+                total = multiSelectPreference.size();
+                for (String retval : multiSelectPreference) {
+                    retorno = DroidCommon.BatteryCurrent.equals(retval);
+                    if (retorno) break;
+                }
             }
-        }
+            Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " " + retorno + " " + DroidCommon.BatteryCurrent + " " + total);
         } catch (Exception ex) {
             Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " Erro: " + ex.getMessage());
         }
         return retorno;
     }
 
+    public static boolean ObtemStatusDispositivoConectado(Context context) {
+        boolean retorno = false;
+        try {
+            retorno = DroidCommon.GetBoolean(context, "dispositivoConectado");
+            Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " " + retorno);
+        } catch (Exception ex) {
+            Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " Erro: " + ex.getMessage());
+        }
+        return retorno;
+    }
+
+    public static boolean ObtemStatusDispositivoDesconectado(Context context) {
+        boolean retorno = false;
+        try {
+            retorno = DroidCommon.GetBoolean(context, "dispositivoDesconectado");
+            Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " " + retorno);
+        } catch (Exception ex) {
+            Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " Erro: " + ex.getMessage());
+        }
+        return retorno;
+    }
 }

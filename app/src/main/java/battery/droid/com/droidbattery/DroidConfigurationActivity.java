@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Robson on 02/05/2017.
@@ -28,7 +29,7 @@ public class DroidConfigurationActivity extends PreferenceActivity {
     private Preference falaBateriaCarregada;
     private Preference dispositivoConectado;
     private Preference dispositivoDesconectado;
-    private MultiSelectListPreference multiSelectListPreference = null;
+    private MultiSelectListPreference multiSelectListPreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +78,9 @@ public class DroidConfigurationActivity extends PreferenceActivity {
                         preference.setSummary("Nenhum percentual selecionado");
                     } else {
                         Collections.sort(newValues);
-                        DroidCommon.MultiSelectPreference = newValues;
-                        preference.setSummary(DroidCommon.MultiSelectPreference.toString() + " por cento");
+                        DroidCommon.SetList(context, "multiSelectPreference", newValues);
+                        Set<String> multiSelectPreference = DroidCommon.GetList(context,"multiSelectPreference") ;
+                        preference.setSummary(multiSelectPreference.toString() + " por cento");
                     }
                     return true;
                 }

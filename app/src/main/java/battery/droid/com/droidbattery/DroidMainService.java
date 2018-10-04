@@ -24,7 +24,6 @@ public class DroidMainService extends Service implements TextToSpeech.OnInitList
 
     private static TextToSpeech tts;
     private Context context;
-    public static boolean loopingBattery;
 
     @Nullable
     @Override
@@ -77,7 +76,6 @@ public class DroidMainService extends Service implements TextToSpeech.OnInitList
                 tts.stop();
                 tts.shutdown();
             }
-            DroidCommon.updateViewsColorBattery(getBaseContext(), Color.GRAY);
             Intent broadcastIntent = new Intent("battery.droid.com.droidbattery.ACTION_RESTART_SERVICE");
             sendBroadcast(broadcastIntent);
         } catch (Exception ex) {
@@ -121,25 +119,29 @@ public class DroidMainService extends Service implements TextToSpeech.OnInitList
     public static void ChamaSinteseVoz(Context context) {
         Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
         try {
-            boolean ativarSinteseVoz = DroidCommon.PreferenceAtivarSinteseVoz(context);
+            boolean sinteseVozAtivado = DroidCommon.PreferenceAtivarSinteseVoz(context);
             boolean naoPerturbe = DroidCommon.NaoPertube(context);
+            boolean dispositivoConectado = DroidCommon.ObtemStatusDispositivoConectado(context);
+            boolean dispositivoDesconectado = DroidCommon.ObtemStatusDispositivoDesconectado(context);
+
             String msg = "";
-            if (ativarSinteseVoz && naoPerturbe) {
-                if (DroidCommon.InformarBateriaCarregada(context)) {
-                    VozBateriaCarregada(context);
-                } else if (DroidCommon.InformarPercentualAtingidoMultiSelectPreference(context)) {
-                    VozPercentualAgingidoMultiSelectPreference(context);
-                } else {
-                    if (DroidCommon.InformaDispositivoConectado) {
-                        if (DroidCommon.DispositivoConectado) {
-                            VozDispositivoConectado(context);
-                        } else if (DroidCommon.DispositivoDesConectado) {
-                            VozDispositivoDesConectado(context);
-                        }
+            if (sinteseVozAtivado && naoPerturbe) {
+                if (dispositivoConectado) {
+                    if (DroidCommon.InformarBateriaCarregada(context)) {
+                        VozBateriaCarregada(context);
+                    } else if (DroidCommon.InformarPercentualAtingidoMultiSelectPreference(context)) {
+                        VozPercentualAgingidoMultiSelectPreference(context);
+                    }
+                }
+                if (DroidCommon.InformaDispositivoConectadoDesconectado) {
+                    if (dispositivoConectado) {
+                        VozDispositivoConectado(context);
+                    } else if (dispositivoDesconectado) {
+                        VozDispositivoDesConectado(context);
                     }
                 }
             } else {
-                if (!ativarSinteseVoz) msg = "Sintese de Voz não ativado";
+                if (!sinteseVozAtivado) msg = "Sintese de Voz não ativado";
                 if (!naoPerturbe) {
                     if (!msg.isEmpty()) {
                         msg = msg + " e ";
@@ -153,20 +155,23 @@ public class DroidMainService extends Service implements TextToSpeech.OnInitList
         }
     }
 
-    public static void AtualizaBateria(Context context) {
-        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " " + DroidCommon.BatteryStatus);
-        if (DroidMainService.loopingBattery) {
-            DroidMainService.loopingBattery = false;
-            Integer totalBattery = Integer.parseInt(DroidCommon.BatteryCurrent);
-            for (Integer i = 0; i <= totalBattery; i++) {
-                DroidCommon.TimeSleep(1);
-                DroidCommon.updateViewsInfoBattery(context, i.toString());
-            }
-        } else {
-            DroidCommon.updateViewsInfoBattery(context, DroidCommon.BatteryCurrent);
+    public static void LoopingBateria(Context context) {
+        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
+        Integer totalBattery = Integer.parseInt(DroidCommon.BatteryCurrent);
+        for (Integer i = 0; i <= totalBattery; i++) {
+            DroidCommon.TimeSleep(1);
+            DroidCommon.updateViewsInfoBattery(context, i.toString());
         }
-        if (DroidCommon.DispositivoConectado) {
-            if (DroidCommon.BatteryStatus == BatteryManager.BATTERY_STATUS_FULL) {
+        DroidCommon.updateViewsInfoBattery(context, DroidCommon.BatteryCurrent);
+    }
+
+    public static void AtualizaCorBateria(Context context) {
+        boolean dispositivoConectado = DroidCommon.ObtemStatusDispositivoConectado(context);
+        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " " + dispositivoConectado);
+        if (dispositivoConectado) {
+            int statusBateria = DroidCommon.ObtemStatusBateria(context);
+            DroidCommon.BateriaCarregada = statusBateria == BatteryManager.BATTERY_STATUS_FULL;
+            if (DroidCommon.BateriaCarregada) {
                 DroidCommon.updateViewsColorBattery(context, Color.GREEN);
             } else DroidCommon.updateViewsColorBattery(context, Color.BLUE);
         } else {
@@ -177,6 +182,7 @@ public class DroidMainService extends Service implements TextToSpeech.OnInitList
                 DroidCommon.updateViewsColorBattery(context, Color.WHITE);
             }
         }
+        DroidCommon.updateViewsInfoBattery(context, DroidCommon.BatteryCurrent);
     }
 
     private static boolean isMyServiceRunning(Context context) {
@@ -228,16 +234,20 @@ public class DroidMainService extends Service implements TextToSpeech.OnInitList
             try {
                 int level = intent.getIntExtra("level", 0);
                 String battery = String.valueOf(level);
-                DroidCommon.BatteryStatus = intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
-                Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " " + battery + " " + DroidCommon.BatteryStatus + " " + DroidCommon.BatteryFull);
-                if ((!DroidCommon.BatteryCurrent.contains(battery)) ||
-                        (DroidCommon.BatteryStatus == BatteryManager.BATTERY_STATUS_FULL && !DroidCommon.BatteryFull)) {
-                    if (DroidCommon.BatteryStatus == BatteryManager.BATTERY_STATUS_FULL) {
-                        DroidCommon.BatteryFull = true;
-                    } else DroidCommon.BatteryFull = false;
+                Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " " + battery);
+                boolean alterouBateria = !DroidCommon.BatteryCurrent.contains(battery);
+                boolean bateria100 = battery.equals("100");
+                if (alterouBateria || (bateria100 && !DroidCommon.BateriaCarregada)) {
                     DroidCommon.BatteryCurrent = battery;
-                    AtualizaBateria(context);
-                    ChamaSinteseVoz(context);
+                    boolean bateriaCarregada = false;
+                    if (bateria100) {
+                        int statusBateria = DroidCommon.ObtemStatusBateria(context);
+                        bateriaCarregada = statusBateria == BatteryManager.BATTERY_STATUS_FULL;
+                    }
+                    if (alterouBateria || bateriaCarregada) {
+                        AtualizaCorBateria(context);
+                        ChamaSinteseVoz(context);
+                    }
                 }
             } catch (Exception ex) {
                 Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " Erro: " + ex.getMessage());
