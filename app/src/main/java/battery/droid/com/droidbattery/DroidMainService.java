@@ -119,36 +119,21 @@ public class DroidMainService extends Service implements TextToSpeech.OnInitList
     public static void ChamaSinteseVoz(Context context) {
         Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
         try {
-            boolean sinteseVozAtivado = DroidCommon.PreferenceAtivarSinteseVoz(context);
-            boolean naoPerturbe = DroidCommon.NaoPertube(context);
             boolean dispositivoConectado = DroidCommon.ObtemStatusDispositivoConectado(context);
             boolean dispositivoDesconectado = DroidCommon.ObtemStatusDispositivoDesconectado(context);
-
-            String msg = "";
-            if (sinteseVozAtivado && naoPerturbe) {
+            if (DroidCommon.InformaDispositivoConectadoDesconectado) {
                 if (dispositivoConectado) {
-                    if (DroidCommon.InformarBateriaCarregada(context)) {
-                        VozBateriaCarregada(context);
-                    } else if (DroidCommon.InformarPercentualAtingidoMultiSelectPreference(context)) {
-                        VozPercentualAgingidoMultiSelectPreference(context);
-                    }
+                    VozDispositivoConectado(context);
+                } else if (dispositivoDesconectado) {
+                    VozDispositivoDesConectado(context);
                 }
-                if (DroidCommon.InformaDispositivoConectadoDesconectado) {
-                    if (dispositivoConectado) {
-                        VozDispositivoConectado(context);
-                    } else if (dispositivoDesconectado) {
-                        VozDispositivoDesConectado(context);
-                    }
+            }
+            if (dispositivoConectado) {
+                if (DroidCommon.InformarBateriaCarregada(context)) {
+                    VozBateriaCarregada(context);
+                } else if (DroidCommon.InformarPercentualAtingidoMultiSelectPreference(context)) {
+                    VozPercentualAgingidoMultiSelectPreference(context);
                 }
-            } else {
-                if (!sinteseVozAtivado) msg = "Sintese de Voz não ativado";
-                if (!naoPerturbe) {
-                    if (!msg.isEmpty()) {
-                        msg = msg + " e ";
-                    }
-                    msg = msg + "Não perturbe ativado";
-                }
-                Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
             }
         } catch (Exception ex) {
             Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " Erro: " + ex.getMessage());
@@ -214,10 +199,12 @@ public class DroidMainService extends Service implements TextToSpeech.OnInitList
     }
 
     private static void Fala(Context context, String texto) {
-        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
-        Toast.makeText(context, texto, Toast.LENGTH_SHORT).show();
-        tts.speak(texto, TextToSpeech.QUEUE_FLUSH, null);
-        AguardandoFalar();
+        if (DroidCommon.SinteseVozNaoPerturbeAtivado(context)) {
+            Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
+            Toast.makeText(context, texto, Toast.LENGTH_SHORT).show();
+            tts.speak(texto, TextToSpeech.QUEUE_FLUSH, null);
+            AguardandoFalar();
+        }
         //stopSelf();
     }
 

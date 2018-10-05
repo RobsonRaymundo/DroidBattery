@@ -13,6 +13,7 @@ import android.text.format.DateFormat;
 import android.util.Log;
 import android.util.TypedValue;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -391,6 +392,25 @@ public class DroidCommon {
             Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " " + retorno);
         } catch (Exception ex) {
             Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " Erro: " + ex.getMessage());
+        }
+        return retorno;
+    }
+
+    public static boolean SinteseVozNaoPerturbeAtivado(Context context) {
+        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
+        boolean sinteseVozAtivado = DroidCommon.PreferenceAtivarSinteseVoz(context);
+        boolean naoPerturbe = DroidCommon.NaoPertube(context);
+        String msg = "";
+        boolean retorno = (sinteseVozAtivado && naoPerturbe);
+        if (!retorno) {
+            if (!sinteseVozAtivado) msg = "Sintese de Voz não ativado";
+            if (!naoPerturbe) {
+                if (!msg.isEmpty()) {
+                    msg = msg + " e ";
+                }
+                msg = msg + "Não perturbe ativado";
+            }
+            Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
         }
         return retorno;
     }
