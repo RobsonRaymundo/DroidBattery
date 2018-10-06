@@ -100,8 +100,8 @@ public class DroidWidget extends AppWidgetProvider {
             if (ACTION_BATTERY_UPDATE.equals(intent.getAction())) {
                 DroidCommon.Vibrar(context, 50);
                 DroidCommon.updateViewsInfoBattery(context, "0");
-                DroidMainService.AtualizaCorBateria(context);
-                DroidMainService.LoopingBateria(context);
+                DroidCommon.AtualizaCorBateria(context);
+                DroidCommon.LoopingBateria(context);
                 DroidMainService.ChamaSinteseVoz(context);
             }
         } catch (Exception ex) {

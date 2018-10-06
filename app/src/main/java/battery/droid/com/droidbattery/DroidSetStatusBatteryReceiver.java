@@ -35,8 +35,8 @@ public class DroidSetStatusBatteryReceiver extends BroadcastReceiver {
                     DroidCommon.InformaDispositivoConectadoDesconectado = true;
                     DroidCommon.updateViewsSizeBattery(context);
                     DroidCommon.onUpdateDroidWidget(context);
-                    DroidMainService.AtualizaCorBateria(context);
-                    DroidMainService.LoopingBateria(context);
+                    DroidCommon.AtualizaCorBateria(context);
+                    DroidCommon.LoopingBateria(context);
                     DroidMainService.ChamaSinteseVoz(context);
                 } catch (Exception ex) {
                     Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " Erro: " + ex.getMessage());

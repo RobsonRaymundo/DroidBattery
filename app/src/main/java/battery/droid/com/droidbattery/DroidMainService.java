@@ -140,35 +140,8 @@ public class DroidMainService extends Service implements TextToSpeech.OnInitList
         }
     }
 
-    public static void LoopingBateria(Context context) {
-        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()));
-        Integer totalBattery = Integer.parseInt(DroidCommon.BatteryCurrent);
-        for (Integer i = 0; i <= totalBattery; i++) {
-            DroidCommon.TimeSleep(1);
-            DroidCommon.updateViewsInfoBattery(context, i.toString());
-        }
-        DroidCommon.updateViewsInfoBattery(context, DroidCommon.BatteryCurrent);
-    }
 
-    public static void AtualizaCorBateria(Context context) {
-        boolean dispositivoConectado = DroidCommon.ObtemStatusDispositivoConectado(context);
-        Log.d(DroidCommon.TAG, DroidCommon.getLogTagWithMethod(new Throwable()) + " " + dispositivoConectado);
-        if (dispositivoConectado) {
-            int statusBateria = DroidCommon.ObtemStatusBateria(context);
-            DroidCommon.BateriaCarregada = statusBateria == BatteryManager.BATTERY_STATUS_FULL;
-            if (DroidCommon.BateriaCarregada) {
-                DroidCommon.updateViewsColorBattery(context, Color.GREEN);
-            } else DroidCommon.updateViewsColorBattery(context, Color.BLUE);
-        } else {
-            Integer totalBattery = Integer.parseInt(DroidCommon.BatteryCurrent);
-            if (totalBattery <= 20) {
-                DroidCommon.updateViewsColorBattery(context, Color.RED);
-            } else {
-                DroidCommon.updateViewsColorBattery(context, Color.WHITE);
-            }
-        }
-        DroidCommon.updateViewsInfoBattery(context, DroidCommon.BatteryCurrent);
-    }
+
 
     private static boolean isMyServiceRunning(Context context) {
         ActivityManager manager = (ActivityManager) context.getSystemService(ACTIVITY_SERVICE);
@@ -232,7 +205,7 @@ public class DroidMainService extends Service implements TextToSpeech.OnInitList
                         bateriaCarregada = statusBateria == BatteryManager.BATTERY_STATUS_FULL;
                     }
                     if (alterouBateria || bateriaCarregada) {
-                        AtualizaCorBateria(context);
+                        DroidCommon.AtualizaCorBateria(context);
                         ChamaSinteseVoz(context);
                     }
                 }

@@ -3,6 +3,7 @@ package battery.droid.com.droidbattery;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.ListPreference;
 import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -29,6 +30,10 @@ public class DroidConfigurationActivity extends PreferenceActivity {
     private Preference falaBateriaCarregada;
     private Preference dispositivoConectado;
     private Preference dispositivoDesconectado;
+    private ListPreference corTextoDispositivoConectado;
+    private ListPreference corTextoBateriaCarregada;
+    private ListPreference corTextoDispositivoDesconectado;
+    private ListPreference corTextoBateriaBaixa;
     private MultiSelectListPreference multiSelectListPreference;
 
     @Override
@@ -79,13 +84,31 @@ public class DroidConfigurationActivity extends PreferenceActivity {
                     } else {
                         Collections.sort(newValues);
                         DroidCommon.SetList(context, "multiSelectPreference", newValues);
-                        Set<String> multiSelectPreference = DroidCommon.GetList(context,"multiSelectPreference") ;
+                        Set<String> multiSelectPreference = DroidCommon.GetList(context, "multiSelectPreference");
                         preference.setSummary(multiSelectPreference.toString() + " por cento");
                     }
                     return true;
                 }
 
 
+            };
+
+            ListPreference.OnPreferenceChangeListener listListener = new ListPreference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object o) {
+                    String stringValue = o.toString();
+
+                    if (preference instanceof ListPreference) {
+                        ListPreference listPreference = (ListPreference) preference;
+                        int prefIndex = listPreference.findIndexOfValue(stringValue);
+                        CharSequence[] labels = listPreference.getEntries();
+                        preference.setSummary(labels[prefIndex]);
+                        DroidCommon.updateViewsInfoBattery(context, "0");
+                        DroidCommon.AtualizaCorBateriaPorPreferenceValor(context, o.toString(), preference);
+                        DroidCommon.LoopingBateria(context);
+                    }
+                    return true;
+                }
             };
 
             SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -108,6 +131,22 @@ public class DroidConfigurationActivity extends PreferenceActivity {
             dispositivoDesconectado = (Preference) findPreference("dispositivoDesconectado");
             dispositivoDesconectado.setSummary(DroidCommon.PreferenceDispositivoDesconectado(context));
             dispositivoDesconectado.setOnPreferenceChangeListener(listener);
+
+            corTextoDispositivoConectado = (ListPreference) findPreference("corTextoDispositivoConectado");
+            corTextoDispositivoConectado.setOnPreferenceChangeListener(listListener);
+            listListener.onPreferenceChange(corTextoDispositivoConectado, corTextoDispositivoConectado.getValue());
+
+            corTextoBateriaCarregada = (ListPreference) findPreference("corTextoBateriaCarregada");
+            corTextoBateriaCarregada.setOnPreferenceChangeListener(listListener);
+            listListener.onPreferenceChange(corTextoBateriaCarregada, corTextoBateriaCarregada.getValue());
+
+            corTextoBateriaBaixa = (ListPreference) findPreference("corTextoBateriaBaixa");
+            corTextoBateriaBaixa.setOnPreferenceChangeListener(listListener);
+            listListener.onPreferenceChange(corTextoBateriaBaixa, corTextoBateriaBaixa.getValue());
+
+            corTextoDispositivoDesconectado = (ListPreference) findPreference("corTextoDispositivoDesconectado");
+            corTextoDispositivoDesconectado.setOnPreferenceChangeListener(listListener);
+            listListener.onPreferenceChange(corTextoDispositivoDesconectado, corTextoDispositivoDesconectado.getValue());
 
             multiSelectListPreference = (MultiSelectListPreference) findPreference("multiSelectListPreference");
             multiSelectListPreference.setEntries(R.array.arrayPercentualAtingido);

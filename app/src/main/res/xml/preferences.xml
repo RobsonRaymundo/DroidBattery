@@ -1,37 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"         xmlns:tools="http://schemas.android.com/tools">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
     <PreferenceCategory
         android:key="telaConfig"
-        android:title="@string/tela_Config">
+        android:title="@string/categoria_sintese_voz">
         <SwitchPreference
             android:defaultValue="true"
             android:key="spf_ativarSinteseVoz"
             android:summary="@string/spf_ativar_sintese_voz"
             android:title="@string/titulo_ativar_voz_google"></SwitchPreference>
+    </PreferenceCategory>
 
+    <PreferenceCategory android:title="@string/categoria_selecione_percentual">
         <MultiSelectListPreference
             android:key="multiSelectListPreference"
             android:title="@string/titulo_pecentual_atingido" />
+    </PreferenceCategory>
 
-
+    <PreferenceCategory android:title="@string/categoria_bateria_carregada">
         <EditTextPreference
             android:defaultValue="@string/txt_fala_bateria_carregada"
             android:key="falaBateriaCarregada"
             android:summary="@string/txt_fala_bateria_carregada"
             android:title="@string/titulo_bateria_carregada" />
 
+        <ListPreference
+            android:defaultValue="-16711936"
+            android:entries="@array/arrayCoresTextoPercentualBateria"
+            android:entryValues="@array/arrayCoresTextoPercentualBateriaValues"
+            android:key="corTextoBateriaCarregada"
+            android:title="@string/titulo_cor_dispositivo_carregado" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/categoria_dispositivo_conectado">
         <EditTextPreference
             android:defaultValue="@string/txt_dispositivo_conectado"
             android:key="dispositivoConectado"
             android:summary="@string/txt_dispositivo_conectado"
             android:title="@string/titulo_dispositivo_conectado" />
 
+        <ListPreference
+            android:defaultValue="-16776961"
+            android:entries="@array/arrayCoresTextoPercentualBateria"
+            android:entryValues="@array/arrayCoresTextoPercentualBateriaValues"
+            android:key="corTextoDispositivoConectado"
+            android:title="@string/titulo_cor_dispositivo_conectado" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/categoria_dispositivo_desconectado">
         <EditTextPreference
             android:defaultValue="@string/txt_dispositivo_desconectado"
             android:key="dispositivoDesconectado"
             android:summary="@string/txt_dispositivo_desconectado"
             android:title="@string/titulo_dispositivo_desconectado" />
-
+        <ListPreference
+            android:defaultValue="-1"
+            android:entries="@array/arrayCoresTextoPercentualBateria"
+            android:entryValues="@array/arrayCoresTextoPercentualBateriaValues"
+            android:key="corTextoDispositivoDesconectado"
+            android:title="@string/titulo_cor_dispositivo_desconectado" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/categoria_bateria_baixa">
+        <ListPreference
+            android:defaultValue="-65536"
+            android:entries="@array/arrayCoresTextoPercentualBateria"
+            android:entryValues="@array/arrayCoresTextoPercentualBateriaValues"
+            android:key="corTextoBateriaBaixa"
+            android:title="@string/titulo_cor_bateria_baixa" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/categoria_nao_perturbe">
         <SwitchPreference
             android:defaultValue="false"
             android:dependency="spf_ativarSinteseVoz"
@@ -50,8 +85,6 @@
             android:key="stopTime"
             android:showDefault="true"
             android:title="@string/stopTime" />
-
-
     </PreferenceCategory>
 
 </PreferenceScreen>
